@@ -217,59 +217,119 @@ if args.mjj:
   #  'Znn' : ['ZH_hbb','ggZH_hbb','WH_lep']
  # }
 
-if not args.mjj:
-    cats = {
-      'Zee' : [
-        (1, 'SR_high_Zee'), (2, 'SR_low_Zee'), (3, 'Zlf_high_Zee'), (4,'Zlf_low_Zee'),
-        (5, 'Zhf_high_Zee'), (6, 'Zhf_low_Zee'), (7,'ttbar_high_Zee'), (8,'ttbar_low_Zee')
-      ],
-      'Zmm' : [
-        (1, 'SR_high_Zmm'), (2, 'SR_low_Zmm'), (3, 'Zlf_high_Zmm'), (4,'Zlf_low_Zmm'),
-        (5, 'Zhf_high_Zmm'), (6, 'Zhf_low_Zmm'), (7,'ttbar_high_Zmm'), (8,'ttbar_low_Zmm')
-      ],
-      'Znn' : [
-        (1, 'SR_high_Znn'), (3, 'Zlf_high_Znn'), (5, 'Zhf_high_Znn'), (7,'ttbar_high_Znn')
-      ],
-     'Wen' : [
-        (1, 'SR_high_Wen'), (3,'Wlf_high_Wen'), (6,'Whf_high_Wen'),  (7,'ttbar_high_Wen')
-      ],
-     'Wmn' : [
-        (1, 'SR_high_Wmn'), (3,'Wlf_high_Wmn'), (6,'Whf_high_Wmn'),  (7,'ttbar_high_Wmn')
-      ]
-    
-    }
-    
-    if args.rebinning_scheme == 'v2-wh-hf-dnn' or args.rebinning_scheme == 'v2-whznnh-hf-dnn':
-        cats['Wen'] = [ (1, 'WenHighPt'), (3,'wlfWen'), (6,'whfWenLow'), (7,'ttWen') ]
-        cats['Wmn'] = [ (1, 'WmnHighPt'), (3,'wlfWmn'), (6,'whfWmnLow'), (7,'ttWmn') ]
-else:
-    cats = {
-      'Zee' : [
-        (1, 'SRHIZee_mjj0'), (2, 'SRLOZee_mjj0'), (3, 'SRHIZee_mjj1'), (4, 'SRLOZee_mjj1'), 
-        (5, 'SRHIZee_mjj2'), (6, 'SRLOZee_mjj2'), (7, 'SRHIZee_mjj3'), (8, 'SRLOZee_mjj3'), 
-        (9, 'Zlf_high_Zee'), (10,'Zlf_low_Zee'), (11,'ttbar_high_Zee'),(12,'ttbar_low_Zee'),
-        (13, 'Zhf_high_Zee'), (14, 'Zhf_low_Zee') 
-      ],
-      'Zmm' : [
-        (1, 'SRHIZmm_mjj0'), (2, 'SRLOZmm_mjj0'), (3, 'SRHIZmm_mjj1'), (4, 'SRLOZmm_mjj1'), 
-        (5, 'SRHIZmm_mjj2'), (6, 'SRLOZmm_mjj2'), (7, 'SRHIZmm_mjj3'), (8, 'SRLOZmm_mjj3'), 
-        (9, 'Zlf_high_Zmm'), (10,'Zlf_low_Zmm'), (11,'ttbar_high_Zmm'),(12,'ttbar_low_Zmm'),
-        (13, 'Zhf_high_Zmm'), (14, 'Zhf_low_Zmm') 
-      ],
-      'Znn' : [
-        (1, 'Znn_13TeV_Signal_mjj0'), (2, 'Znn_13TeV_Signal_mjj1'), 
-        (3, 'Znn_13TeV_Signal_mjj2'), (4, 'Znn_13TeV_Signal_mjj3'), 
-        (5, 'Znn_13TeV_Zlight'), (6, 'Znn_13TeV_Zbb'), (7,'Znn_13TeV_TT')
-      ],
-     'Wen' : [
-        (1, 'WenHighPt_mjj0'), (2, 'WenHighPt_mjj1'), (3, 'WenHighPt_mjj2'),(4, 'WenHighPt_mjj3'),  
-        (5,'wlfWen'), (6,'whfWenLow'), (7,'ttWen')
-      ],
-     'Wmn' : [
-        (1, 'WmnHighPt_mjj0'), (2, 'WmnHighPt_mjj1'), (3, 'WmnHighPt_mjj2'),(4, 'WmnHighPt_mjj3'),  
-        (5,'wlfWmn'), (6,'whfWmnLow'), (7,'ttWmn')
-      ]
-    }
+#if not args.mjj:
+#    cats = {
+#      'Zee' : [
+#        (1, 'SR_high_Zee'), (2, 'SR_low_Zee'), (3, 'Zlf_high_Zee'), (4,'Zlf_low_Zee'),
+#        (5, 'Zhf_high_Zee'), (6, 'Zhf_low_Zee'), (7,'ttbar_high_Zee'), (8,'ttbar_low_Zee')
+#      ],
+#      'Zmm' : [
+#        (1, 'SR_high_Zmm'), (2, 'SR_low_Zmm'), (3, 'Zlf_high_Zmm'), (4,'Zlf_low_Zmm'),
+#        (5, 'Zhf_high_Zmm'), (6, 'Zhf_low_Zmm'), (7,'ttbar_high_Zmm'), (8,'ttbar_low_Zmm')
+#      ],
+#      'Znn' : [
+#        (1, 'SR_high_Znn'), (3, 'Zlf_high_Znn'), (5, 'Zhf_high_Znn'), (7,'ttbar_high_Znn')
+#      ],
+#     'Wen' : [
+#        (1, 'SR_high_Wen'), (3,'Wlf_high_Wen'), (6,'Whf_high_Wen'),  (7,'ttbar_high_Wen')
+#      ],
+#     'Wmn' : [
+#        (1, 'SR_high_Wmn'), (3,'Wlf_high_Wmn'), (6,'Whf_high_Wmn'),  (7,'ttbar_high_Wmn')
+#      ]
+#    
+#    }
+#    
+#    if args.rebinning_scheme == 'v2-wh-hf-dnn' or args.rebinning_scheme == 'v2-whznnh-hf-dnn':
+#        cats['Wen'] = [ (1, 'WenHighPt'), (3,'wlfWen'), (6,'whfWenLow'), (7,'ttWen') ]
+#        cats['Wmn'] = [ (1, 'WmnHighPt'), (3,'wlfWmn'), (6,'whfWmnLow'), (7,'ttWmn') ]
+#else:
+#    cats = {
+#      'Zee' : [
+#        (1, 'SRHIZee_mjj0'), (2, 'SRLOZee_mjj0'), (3, 'SRHIZee_mjj1'), (4, 'SRLOZee_mjj1'), 
+#        (5, 'SRHIZee_mjj2'), (6, 'SRLOZee_mjj2'), (7, 'SRHIZee_mjj3'), (8, 'SRLOZee_mjj3'), 
+#        (9, 'Zlf_high_Zee'), (10,'Zlf_low_Zee'), (11,'ttbar_high_Zee'),(12,'ttbar_low_Zee'),
+#        (13, 'Zhf_high_Zee'), (14, 'Zhf_low_Zee') 
+#      ],
+#      'Zmm' : [
+#        (1, 'SRHIZmm_mjj0'), (2, 'SRLOZmm_mjj0'), (3, 'SRHIZmm_mjj1'), (4, 'SRLOZmm_mjj1'), 
+#        (5, 'SRHIZmm_mjj2'), (6, 'SRLOZmm_mjj2'), (7, 'SRHIZmm_mjj3'), (8, 'SRLOZmm_mjj3'), 
+#        (9, 'Zlf_high_Zmm'), (10,'Zlf_low_Zmm'), (11,'ttbar_high_Zmm'),(12,'ttbar_low_Zmm'),
+#        (13, 'Zhf_high_Zmm'), (14, 'Zhf_low_Zmm') 
+#      ],
+#      'Znn' : [
+#        (1, 'Znn_13TeV_Signal_mjj0'), (2, 'Znn_13TeV_Signal_mjj1'), 
+#        (3, 'Znn_13TeV_Signal_mjj2'), (4, 'Znn_13TeV_Signal_mjj3'), 
+#        (5, 'Znn_13TeV_Zlight'), (6, 'Znn_13TeV_Zbb'), (7,'Znn_13TeV_TT')
+#      ],
+#     'Wen' : [
+#        (1, 'WenHighPt_mjj0'), (2, 'WenHighPt_mjj1'), (3, 'WenHighPt_mjj2'),(4, 'WenHighPt_mjj3'),  
+#        (5,'wlfWen'), (6,'whfWenLow'), (7,'ttWen')
+#      ],
+#     'Wmn' : [
+#        (1, 'WmnHighPt_mjj0'), (2, 'WmnHighPt_mjj1'), (3, 'WmnHighPt_mjj2'),(4, 'WmnHighPt_mjj3'),  
+#        (5,'wlfWmn'), (6,'whfWmnLow'), (7,'ttWmn')
+#      ]
+#    }
+
+lowSuffix = ""
+#lowSuffix = "50" #uncomment for 50GeV Vpt boundary
+
+cats = {
+  'Zee' : [
+    (1, 'SR_low%s_Zee'%(lowSuffix)), (2, 'Zlf_low%s_Zee'%(lowSuffix)), (3, 'Zhf_low%s_Zee'%(lowSuffix)), (4, 'ttbar_low%s_Zee'%(lowSuffix)),
+    (5, 'SR_med_Zee_0j'), (6, 'Zlf_med_Zee'), (7, 'Zhf_med_Zee'), (8, 'ttbar_med_Zee'),
+    (9, 'SR_med_Zee_ge1j'), 
+    (14, 'Zlf_high_Zee'), (15, 'Zhf_high_Zee'), (16, 'ttbar_high_Zee'),
+    (21, 'SR_high1_Zee'),  (23, 'SR_high2_Zee'), 
+  ],
+  'Zmm' : [
+    (1, 'SR_low%s_Zmm'%(lowSuffix)), (2, 'Zlf_low%s_Zmm'%(lowSuffix)), (3, 'Zhf_low%s_Zmm'%(lowSuffix)), (4, 'ttbar_low%s_Zmm'%(lowSuffix)),
+    (5, 'SR_med_Zmm_0j'), (6, 'Zlf_med_Zmm'), (7, 'Zhf_med_Zmm'), (8, 'ttbar_med_Zmm'),
+    (9, 'SR_med_Zmm_ge1j'),
+    (14, 'Zlf_high_Zmm'), (15, 'Zhf_high_Zmm'), (16, 'ttbar_high_Zmm'),
+    (21, 'SR_high1_Zmm'),  (23, 'SR_high2_Zmm'), 
+  ],
+  'Znn' : [
+    (5, 'SR_med_Znn_0j'), (6, 'Zlf_med_Znn'), (7, 'Zhf_med_Znn'), (8, 'ttbar_med_Znn'),
+    (9, 'SR_med_Znn_ge1j'),
+    (14, 'Zlf_high_Znn'), (15, 'Zhf_high_Znn'), (16, 'ttbar_high_Znn'),
+    (21, 'SR_high1_Znn'),  (23, 'SR_high2_Znn'), 
+  ],
+ 'Wen' : [
+    (5, 'SR_med_Wen'), (6, 'Wlf_med_Wen'), (7, 'Whf_med_Wen'), (8, 'ttbar_med_Wen'),
+    (14, 'Wlf_high_Wen'), (15, 'Whf_high_Wen'), (16, 'ttbar_high_Wen'),
+    (21, 'SR_high1_Wen'),  (23, 'SR_high2_Wen'), 
+
+  ],
+ 'Wmn' : [
+    (5, 'SR_med_Wmn'), (6, 'Wlf_med_Wmn'), (7, 'Whf_med_Wmn'), (8, 'ttbar_med_Wmn'),
+    (14, 'Wlf_high_Wmn'), (15, 'Whf_high_Wmn'), (16, 'ttbar_high_Wmn'),
+    (21, 'SR_high1_Wmn'), (23, 'SR_high2_Wmn'), 
+  ]
+}
+sig_cats = {
+  'Zee' : [
+    (1, 'SR_low%s_Zee'%(lowSuffix)), (5, 'SR_med_Zee_0j'),(9,'SR_med_Zee_ge1j'),
+    (21, 'SR_high1_Zee'),  (23, 'SR_high2_Zee'), 
+  ],
+  'Zmm' : [
+    (1, 'SR_low%s_Zmm'%(lowSuffix)), (5, 'SR_med_Zmm_0j'),(9, 'SR_med_Zmm_ge1j'),
+    (21, 'SR_high1_Zmm'),  (23, 'SR_high2_Zmm'), 
+  ],
+  'Znn' : [
+    (5, 'SR_med_Znn_0j'),(9,'SR_med_Znn_ge1j'),
+    (21, 'SR_high1_Znn'),  (23, 'SR_high2_Znn'),
+  ],
+ 'Wen' : [
+    (5, 'SR_med_Wen'),
+    (21, 'SR_high1_Wen'),  (23, 'SR_high2_Wen'), 
+  ],
+ 'Wmn' : [
+    (5, 'SR_med_Wmn'),
+    (21, 'SR_high1_Wmn'), (23, 'SR_high2_Wmn'), 
+  ]
+}
+
 
 for chn in chns:
   cb.AddObservations( ['*'], ['vhbb'], ['13TeV'], [chn], cats[chn])
@@ -277,7 +337,7 @@ for chn in chns:
   cb.AddProcesses( ['*'], ['vhbb'], ['13TeV'], [chn], sig_procs[chn], cats[chn], True)
 
 #cb.FilterProcs(lambda x: x.bin_id()==7 and x.channel()=='Znn' and x.process()=='Zj1b')
-cb.FilterProcs(lambda x: x.bin_id()==1 and x.channel()=='Znn' and x.process()=='QCD')
+cb.FilterProcs(lambda x: x.bin_id()in [5,9,21,23] and x.channel()=='Znn' and x.process()=='QCD') #was removed from Znn SR in HIG18016
 
 systs.AddCommonSystematics(cb)
 if year=='2016':
@@ -408,7 +468,7 @@ cb.FilterProcs(lambda x: drop_znnqcd(cb,x))
 
 if year=='2016':
     cb.cp().syst_name(["CMS_res_j_13TeV_2016"]).ForEachProc(lambda x:symmetrise_syst(cb,x,'CMS_res_j_13TeV_2016'))
-#Removed becasue res_j not computed. 
+
 if year=='2017':
     cb.cp().syst_name(["CMS_res_j_13TeV"]).ForEachProc(lambda x:symmetrise_syst(cb,x,'CMS_res_j_13TeV'))
 
@@ -474,29 +534,29 @@ writer.SetVerbosity(0);
                 
 #Combined:
 writer.WriteCards("cmb",cb);
-writer.WriteCards("cmb_CRonly",cb.cp().bin_id([3,4,5,6,7,8]));
-
-#Per channel:
-for chn in chns:
-  writer.WriteCards(chn,cb.cp().channel([chn]))
-
-if 'Znn' in chns:
-  #writer.WriteCards("Znn",cb.cp().FilterAll(lambda x: not (x.channel()=='Znn' or ( (x.channel() in ['Wmn','Wen']) and x.bin_id() in [3,4,5,6,7,8]))))
-  if not args.mjj:
-      writer.WriteCards("Znn",cb.cp().channel(['Znn']))
-      writer.WriteCards("Znn",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Wmn','Wen']))
-      writer.WriteCards("Znn_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Znn','Wmn','Wen']))
-  else:
-      writer.WriteCards("Znn",cb.cp().channel(['Znn']))
-      writer.WriteCards("Znn",cb.cp().bin_id([5,6,7,8]).channel(['Wmn','Wen']))
-      writer.WriteCards("Znn_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Znn']))
-      writer.WriteCards("Znn_CRonly",cb.cp().bin_id([5,6,7,8]).channel(['Wmn','Wen']))
-
-#Zll and Wln:
-if 'Wen' in chns and 'Wmn' in chns:
-  writer.WriteCards("Wln",cb.cp().channel(['Wen','Wmn']))
-  writer.WriteCards("Wln_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Wen','Wmn']))
-
-if 'Zee' in chns and 'Zmm' in chns:
-  writer.WriteCards("Zll",cb.cp().channel(['Zee','Zmm']))
-  writer.WriteCards("Zll_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Zee','Zmm']))
+#writer.WriteCards("cmb_CRonly",cb.cp().bin_id([3,4,5,6,7,8]));
+#
+##Per channel:
+#for chn in chns:
+#  writer.WriteCards(chn,cb.cp().channel([chn]))
+#
+#if 'Znn' in chns:
+#  #writer.WriteCards("Znn",cb.cp().FilterAll(lambda x: not (x.channel()=='Znn' or ( (x.channel() in ['Wmn','Wen']) and x.bin_id() in [3,4,5,6,7,8]))))
+#  if not args.mjj:
+#      writer.WriteCards("Znn",cb.cp().channel(['Znn']))
+#      writer.WriteCards("Znn",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Wmn','Wen']))
+#      writer.WriteCards("Znn_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Znn','Wmn','Wen']))
+#  else:
+#      writer.WriteCards("Znn",cb.cp().channel(['Znn']))
+#      writer.WriteCards("Znn",cb.cp().bin_id([5,6,7,8]).channel(['Wmn','Wen']))
+#      writer.WriteCards("Znn_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Znn']))
+#      writer.WriteCards("Znn_CRonly",cb.cp().bin_id([5,6,7,8]).channel(['Wmn','Wen']))
+#
+##Zll and Wln:
+#if 'Wen' in chns and 'Wmn' in chns:
+#  writer.WriteCards("Wln",cb.cp().channel(['Wen','Wmn']))
+#  writer.WriteCards("Wln_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Wen','Wmn']))
+#
+#if 'Zee' in chns and 'Zmm' in chns:
+#  writer.WriteCards("Zll",cb.cp().channel(['Zee','Zmm']))
+#  writer.WriteCards("Zll_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Zee','Zmm']))
