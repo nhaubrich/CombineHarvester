@@ -14,8 +14,8 @@ CHN_DICT_SR = {
 
 
 
-for MODE in ['prefit','postfit']:
-#for MODE in ['postfit']:
+#for MODE in ['prefit','postfit']:
+for MODE in ['prefit']:
     for CHN in ['Wmn','Wen','Zee','Zmm','Znn']:
         for i in range(0,len(CHN_DICT_SR[CHN])):
               print CHN_DICT_SR[CHN][i]
