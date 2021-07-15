@@ -102,7 +102,8 @@ parser.add_argument(
  '--doVV', default=False, help="""if True assume we are running the VZ(bb) analysis""")
 parser.add_argument(
  '--mjj',  default=False, help="""if True assume we are running the mjj analysis""")
-
+parser.add_argument(
+        '--sfscheme', default="HIG18016",help="""Process SF scheme. HIG18016 has separate low/high Vpt SFs. catmig has SFs inclusive in Vpt plus Vpt category migraions""") 
 args = parser.parse_args()
 
 cb = ch.CombineHarvester()
@@ -343,7 +344,7 @@ systs.AddCommonSystematics(cb)
 if year=='2016':
   systs.AddSystematics2016(cb)
 if year=='2017':
-  systs.AddSystematics2017(cb)
+  systs.AddSystematics2017(cb,sfscheme=args.sfscheme)
 
 
 if args.bbb_mode==0:
@@ -508,6 +509,30 @@ cb.SetGroup('met',['.*MET.*'])
 
 #To rename processes:
 #cb.cp().ForEachObj(lambda x: x.set_process("WH_lep") if x.process()=='WH_hbb' else None)
+
+
+if args.sfscheme == "catmig":
+  for chan,name in zip([['Wen','Wmn'],['Znn']],['Wln','Znn']):
+    cb.cp().channel(chan).process(['Zj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj0b_13TeV'+year+name)
+    cb.cp().channel(chan).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj1b_13TeV'+year+name)
+    cb.cp().channel(chan).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj2b_13TeV'+year+name)
+    cb.cp().channel(chan).process(['Wj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj0b_13TeV'+year+name)
+    cb.cp().channel(chan).process(['Wj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj1b_13TeV'+year+name)
+    cb.cp().channel(chan).process(['Wj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj2b_13TeV'+year+name)
+ 
+    cb.cp().channel(chan).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_TT_13TeV'+year+name)
+ 
+  chan="Zll"
+  cb.cp().channel(["Zee","Zmm"]).process(['Zj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj0b_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj1b_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj2b_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['Zj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj0b_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj1b_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj2b_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_TT_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_TT_13TeV'+year+chan)
+
+
 
 
 rebin = ch.AutoRebin().SetBinThreshold(0.).SetBinUncertFraction(1.0).SetRebinMode(1).SetPerformRebin(True).SetVerbosity(1)
