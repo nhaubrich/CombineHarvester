@@ -368,98 +368,98 @@ for chn in chns:
       file, 'BDT_$BIN_$PROCESS', 'BDT_$BIN_$PROCESS_$SYSTEMATIC')
 
 # play with rebinning (and/or cutting) of the shapes
-if args.rebinning_scheme == 'v1': # Zll only: 1bin in TT/LF, 2bins in HF
-    binning=np.linspace(0.0,1.0,num=2)
-    print 'binning in CR for LF,TT fitting variable:',binning,'for channels',['Zee','Zmm']
-    cb.cp().channel(['Zee','Zmm']).bin_id([3,4,7,8]).VariableRebin(binning)
-    binning=np.linspace(0.0,1.0,num=3)
-    print 'binning in CR for HF fitting variable:',binning,'for channels',['Zee','Zmm']
-    cb.cp().channel(['Zee','Zmm']).bin_id([5,6]).VariableRebin(binning)
+#if args.rebinning_scheme == 'v1': # Zll only: 1bin in TT/LF, 2bins in HF
+#    binning=np.linspace(0.0,1.0,num=2)
+#    print 'binning in CR for LF,TT fitting variable:',binning,'for channels',['Zee','Zmm']
+#    cb.cp().channel(['Zee','Zmm']).bin_id([3,4,7,8]).VariableRebin(binning)
+#    binning=np.linspace(0.0,1.0,num=3)
+#    print 'binning in CR for HF fitting variable:',binning,'for channels',['Zee','Zmm']
+#    cb.cp().channel(['Zee','Zmm']).bin_id([5,6]).VariableRebin(binning)
 
-elif args.rebinning_scheme == 'v2': # all channels: 1bin in TT/LF, 2bins in HF
-    binning=np.linspace(0.0,1.0,num=2)
-    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
-    binning=np.linspace(0.0,1.0,num=3)
-    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
-    cb.cp().bin_id([5,6]).VariableRebin(binning)
+#elif args.rebinning_scheme == 'v2': # all channels: 1bin in TT/LF, 2bins in HF
+#    binning=np.linspace(0.0,1.0,num=2)
+#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+#    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
+#    binning=np.linspace(0.0,1.0,num=3)
+#    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
+#    cb.cp().bin_id([5,6]).VariableRebin(binning)
     
-elif args.rebinning_scheme == 'v2-wh-hf-dnn': # all channels: 1bin in TT/LF, 2bins in HF
-    binning=np.linspace(0.0,1.0,num=2)
-    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
-    binning=np.linspace(0.0,1.0,num=3)
-    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
-    cb.cp().channel(['Zee','Zmm','Znn']).bin_id([5,6]).VariableRebin(binning)
-    binning=np.linspace(0.0,5.0,num=6)
-    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
-    cb.cp().channel(['Wmn','Wen']).bin_id([5,6]).VariableRebin(binning) 
+#elif args.rebinning_scheme == 'v2-wh-hf-dnn': # all channels: 1bin in TT/LF, 2bins in HF
+#    binning=np.linspace(0.0,1.0,num=2)
+#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+#    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
+#    binning=np.linspace(0.0,1.0,num=3)
+#    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
+#    cb.cp().channel(['Zee','Zmm','Znn']).bin_id([5,6]).VariableRebin(binning)
+#    binning=np.linspace(0.0,5.0,num=6)
+#    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
+#    cb.cp().channel(['Wmn','Wen']).bin_id([5,6]).VariableRebin(binning) 
+#   
+#elif args.rebinning_scheme == 'v2-whznnh-hf-dnn': # all channels: 1bin in TT/LF, 2bins in HF
+#    binning=np.linspace(0.0,1.0,num=2)
+#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+#    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
+#    binning=np.linspace(0.0,1.0,num=3)
+#    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
+#    cb.cp().channel(['Zee','Zmm']).bin_id([5,6]).VariableRebin(binning)
+#    binning=np.linspace(0.0,5.0,num=6)
+#    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
+#    cb.cp().channel(['Wmn','Wen','Znn']).bin_id([5,6]).VariableRebin(binning) 
    
-elif args.rebinning_scheme == 'v2-whznnh-hf-dnn': # all channels: 1bin in TT/LF, 2bins in HF
-    binning=np.linspace(0.0,1.0,num=2)
-    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
-    binning=np.linspace(0.0,1.0,num=3)
-    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
-    cb.cp().channel(['Zee','Zmm']).bin_id([5,6]).VariableRebin(binning)
-    binning=np.linspace(0.0,5.0,num=6)
-    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
-    cb.cp().channel(['Wmn','Wen','Znn']).bin_id([5,6]).VariableRebin(binning) 
-   
-elif args.rebinning_scheme == 'v3': # all channels: 1bin in TT/LF, no rebin in HF
-    binning=np.linspace(0.0,1.0,num=2)
-    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
-    
-elif args.rebinning_scheme == 'v4': # all channels: 1bin in TT/LF, no rebin in HF
-    binning=np.linspace(0.0,1.0,num=3)
-    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
-    binning=np.linspace(0.0,1.0,num=5)
-    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
-    cb.cp().bin_id([5,6]).VariableRebin(binning)
-    
-elif args.rebinning_scheme == 'sr_mva_cut_2bins': # HIG-16-044 style
-    binning=np.linspace(0.2,1.0,num=13)
-    print 'binning in SR for fitting variable:',binning
-    cb.cp().bin_id([1,2]).VariableRebin(binning)
-
-elif args.rebinning_scheme == 'v2-whznnh-hf-dnn-massAnalysis': # all channels: 1bin in TT/LF, 2bins in HF
-    binning=np.linspace(0.,1.0,num=2)
-    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-    cb.cp().channel(['Zee','Zmm']).bin_id([9,10,11,12]).VariableRebin(binning)
-    cb.cp().channel(['Wen','Wmn']).bin_id([5,7]).VariableRebin(binning)
-    cb.cp().channel(['Znn']).bin_id([5,7]).VariableRebin(binning)
-    binning=np.linspace(0.,1.0,num=3)
-    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
-    cb.cp().channel(['Zee','Zmm']).bin_id([13,14]).VariableRebin(binning)
-    binning=np.linspace(0.0,5.0,num=6)
-    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
-    cb.cp().channel(['Wen','Wmn']).bin_id([6]).VariableRebin(binning)
-    cb.cp().channel(['Znn']).bin_id([6]).VariableRebin(binning)
-    print 'binning in SR for all channels'
-    binning=np.linspace(60,150,num=5)
-    binning=np.append(binning,[160.])
-    cb.cp().channel(['Zee','Zmm']).bin_id([1,2,3,4,5,6,7,8]).VariableRebin(binning)
-    cb.cp().channel(['Wen','Wmn','Znn']).bin_id([1,2,3,4]).VariableRebin(binning)
-elif args.rebinning_scheme == 'v2-whznnh-hf-dnn-massAnalysis-2016': # all channels: 1bin in TT/LF, 2bins in HF
-    binning=np.linspace(-1.0,1.0,num=2)
-    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-    cb.cp().channel(['Zee','Zmm']).bin_id([9,10,11,12]).VariableRebin(binning)
-    cb.cp().channel(['Wen','Wmn']).bin_id([5,7]).VariableRebin(binning)
-    cb.cp().channel(['Znn']).bin_id([5,7]).VariableRebin(binning)
-    binning=np.linspace(0.,1.0,num=3)
-    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
-    cb.cp().channel(['Zee','Zmm']).bin_id([13,14]).VariableRebin(binning)
-    binning=np.linspace(0.0,5.0,num=6)
-    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
-    cb.cp().channel(['Wen','Wmn']).bin_id([6]).VariableRebin(binning)
-    cb.cp().channel(['Znn']).bin_id([6]).VariableRebin(binning)
-    print 'binning in SR for all channels'
-    binning=np.linspace(60,150,num=5)
-    binning=np.append(binning,[160.])
-    cb.cp().channel(['Zee','Zmm']).bin_id([1,2,3,4,5,6,7,8]).VariableRebin(binning)
-    cb.cp().channel(['Wen','Wmn','Znn']).bin_id([1,2,3,4]).VariableRebin(binning)
+#elif args.rebinning_scheme == 'v3': # all channels: 1bin in TT/LF, no rebin in HF
+#    binning=np.linspace(0.0,1.0,num=2)
+#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+#    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
+#    
+#elif args.rebinning_scheme == 'v4': # all channels: 1bin in TT/LF, no rebin in HF
+#    binning=np.linspace(0.0,1.0,num=3)
+#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+#    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
+#    binning=np.linspace(0.0,1.0,num=5)
+#    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
+#    cb.cp().bin_id([5,6]).VariableRebin(binning)
+#    
+#elif args.rebinning_scheme == 'sr_mva_cut_2bins': # HIG-16-044 style
+#    binning=np.linspace(0.2,1.0,num=13)
+#    print 'binning in SR for fitting variable:',binning
+#    cb.cp().bin_id([1,2]).VariableRebin(binning)
+#
+#elif args.rebinning_scheme == 'v2-whznnh-hf-dnn-massAnalysis': # all channels: 1bin in TT/LF, 2bins in HF
+#    binning=np.linspace(0.,1.0,num=2)
+#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+#    cb.cp().channel(['Zee','Zmm']).bin_id([9,10,11,12]).VariableRebin(binning)
+#    cb.cp().channel(['Wen','Wmn']).bin_id([5,7]).VariableRebin(binning)
+#    cb.cp().channel(['Znn']).bin_id([5,7]).VariableRebin(binning)
+#    binning=np.linspace(0.,1.0,num=3)
+#    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
+#    cb.cp().channel(['Zee','Zmm']).bin_id([13,14]).VariableRebin(binning)
+#    binning=np.linspace(0.0,5.0,num=6)
+#    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
+#    cb.cp().channel(['Wen','Wmn']).bin_id([6]).VariableRebin(binning)
+#    cb.cp().channel(['Znn']).bin_id([6]).VariableRebin(binning)
+#    print 'binning in SR for all channels'
+#    binning=np.linspace(60,150,num=5)
+#    binning=np.append(binning,[160.])
+#    cb.cp().channel(['Zee','Zmm']).bin_id([1,2,3,4,5,6,7,8]).VariableRebin(binning)
+#    cb.cp().channel(['Wen','Wmn','Znn']).bin_id([1,2,3,4]).VariableRebin(binning)
+#elif args.rebinning_scheme == 'v2-whznnh-hf-dnn-massAnalysis-2016': # all channels: 1bin in TT/LF, 2bins in HF
+#    binning=np.linspace(-1.0,1.0,num=2)
+#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+#    cb.cp().channel(['Zee','Zmm']).bin_id([9,10,11,12]).VariableRebin(binning)
+#    cb.cp().channel(['Wen','Wmn']).bin_id([5,7]).VariableRebin(binning)
+#    cb.cp().channel(['Znn']).bin_id([5,7]).VariableRebin(binning)
+#    binning=np.linspace(0.,1.0,num=3)
+#    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
+#    cb.cp().channel(['Zee','Zmm']).bin_id([13,14]).VariableRebin(binning)
+#    binning=np.linspace(0.0,5.0,num=6)
+#    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
+#    cb.cp().channel(['Wen','Wmn']).bin_id([6]).VariableRebin(binning)
+#    cb.cp().channel(['Znn']).bin_id([6]).VariableRebin(binning)
+#    print 'binning in SR for all channels'
+#    binning=np.linspace(60,150,num=5)
+#    binning=np.append(binning,[160.])
+#    cb.cp().channel(['Zee','Zmm']).bin_id([1,2,3,4,5,6,7,8]).VariableRebin(binning)
+#    cb.cp().channel(['Wen','Wmn','Znn']).bin_id([1,2,3,4]).VariableRebin(binning)
 
 cb.FilterProcs(lambda x: drop_zero_procs(cb,x))
 cb.FilterSysts(lambda x: drop_zero_systs(x))
