@@ -462,6 +462,37 @@ for chn in chns:
 #    cb.cp().channel(['Zee','Zmm']).bin_id([1,2,3,4,5,6,7,8]).VariableRebin(binning)
 #    cb.cp().channel(['Wen','Wmn','Znn']).bin_id([1,2,3,4]).VariableRebin(binning)
 
+binning_LFlow=np.array([75.0,110.0,150.0])
+print 'binning in CR for LF low fitting variable:',binning_LFlow,'for all the channels'
+cb.cp().bin_id([2]).VariableRebin(binning_LFlow)
+
+binning_TTlow=np.array([75.0,150.0])
+print 'binning in CR for TT low fitting variable:',binning_TTlow,'for all the channels'
+cb.cp().bin_id([4]).VariableRebin(binning_TTlow)
+
+binning_LFmed=np.array([150.0,200.0,250.0])
+print 'binning in CR for LF med fitting variable:',binning_LFmed,'for all the channels'
+cb.cp().bin_id([6]).VariableRebin(binning_LFmed)
+
+binning_TTmed=np.array([150.0,250.0])
+print 'binning in CR for TT med fitting variable:',binning_TTmed,'for all the channels'
+cb.cp().bin_id([8]).VariableRebin(binning_TTmed)
+
+binning_LFhigh=np.array([250.0,300.0,400.0,2000.0])
+print 'binning in CR for LF high fitting variable:',binning_LFhigh,'for all the channels'
+cb.cp().bin_id([14]).VariableRebin(binning_LFhigh)
+
+binning_TThigh=np.array([250.0,2000.0])
+print 'binning in CR for TT high fitting variable:',binning_TThigh,'for all the channels'
+cb.cp().bin_id([16]).VariableRebin(binning_TThigh)
+
+binning=np.linspace(2.0,5.0,num=4)
+print 'binning in CR for HF fitting variable:',binning,'for all Zll channel'
+cb.cp().channel(['Zee','Zmm']).bin_id([3,7,15]).VariableRebin(binning)
+
+
+
+
 cb.FilterProcs(lambda x: drop_zero_procs(cb,x))
 cb.FilterSysts(lambda x: drop_zero_systs(x))
 #Drop QCD in Z+HF CR
