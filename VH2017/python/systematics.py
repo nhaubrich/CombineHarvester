@@ -249,7 +249,7 @@ def AddSystematics2017(cb,sfscheme):
     for proc in ['TT']: 
 
         cb.cp().channel(['Wen','Wmn']).process([proc]).AddSyst(cb,
-          'SF_'+proc+'_Wen_'+year, 'rateParam', ch.SystMap('bin_id')
+          'SF_'+proc+'_Wln_'+year, 'rateParam', ch.SystMap('bin_id')
           ([5,6,7,8,9,13,14,15,16,17,21,22,23,24,18,19,20],1.0))
         
        
