@@ -143,7 +143,7 @@ def AddSystematics2017(cb,sfscheme,vpt_rw):
 
 # igrating to new vpt LO to NLO reweighting
   if not vpt_rw:
-      cb.cp().process(['Zj0b','Zj1b','Zj2b','Wj0b','Wj1b','Wj2b']).AddSyst(cb,
+      cb.cp().process(['Zj0b','Zj1b','Zj2b','Wj0b','Wj1b','Wj2b','Zj0b_c','Wj0b_c','Zj0b_udsg','Wj0b_udsg']).AddSyst(cb,
 			'CMS_vhbb_vjetnlodetajjrw_13TeV','shape',ch.SystMap()(1.0))
   else:
       for nloWeight in ['ZJets0','WJets0']:
