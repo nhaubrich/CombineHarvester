@@ -523,6 +523,7 @@ if year=='2017':
     cb.cp().channel(['Wen','Wmn']).process(['VVHF','VVLF']).ForEachProc(lambda x: increase_bin_errors(x))
 if args.vpt_rw:
     for nloWeight in ['ZJets0','ZJets1','ZJets2','ZBJets1','ZBJets2','WJets0','WJets1','WJets2','WBJets1','WBJets2','DYJets0','DYJets1','DYJets2','DYBJets1','DYBJets2']:
+        cb.cp().syst_name(['CMS_vhbb_vjetnlovptrw_' + nloWeight  + '_13TeV']).ForEachProc(lambda x:symmetrise_syst(cb,x,'CMS_vhbb_vjetnlovptrw_' + nloWeight  + '_13TeV'))
         cb.cp().RenameSystematic(cb, 'CMS_vhbb_vjetnlovptrw_' + nloWeight  + '_13TeV', 'CMS_vhbb_vjetnlovptrw_' + nloWeight  + '_13TeV' + year)
 else:
     cb.cp().channel(['Wen','Wmn','Znn']).process(W_LF).RenameSystematic(cb,'CMS_vhbb_vjetnlodetajjrw_13TeV','CMS_W0b_vhbb_vjetnlodetajjrw_13TeV')
