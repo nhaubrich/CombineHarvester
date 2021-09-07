@@ -356,7 +356,7 @@ systs.AddCommonSystematics(cb)
 if year=='2016':
   systs.AddSystematics2016(cb)
 if year=='2017':
-  systs.AddSystematics2017(cb,sfscheme=args.sfscheme,args.vpt_rw)
+  systs.AddSystematics2017(cb,args.sfscheme,args.vpt_rw)
 
 
 if args.bbb_mode==0:
