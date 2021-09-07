@@ -48,7 +48,6 @@ def remove_norm_effect(syst):
 
 def symm(syst,nominal):
   print 'Symmetrising systematic ', syst.name(), ' in region ', syst.bin(), ' for process ', syst.process()
-  else: debug=0
   hist_u = syst.ShapeUAsTH1F()
   hist_u.Scale(nominal.Integral()*syst.value_u())
   hist_d = nominal.Clone()
