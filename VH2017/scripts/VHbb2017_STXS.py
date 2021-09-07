@@ -97,9 +97,13 @@ parser.add_argument(
 parser.add_argument(
  '--extra_folder', default='', help="""Additional folder where cards are""")
 parser.add_argument(
- '--rebinning_scheme', default='v2-whznnh-hf-dnn', help="""Rebinning scheme for CR and SR distributions""")
+ '--rebinning_scheme', default='v2-whznnh-hf-dnn', help="""Rebinning scheme for CR and SR distributions, V11CRobs option for HIG-20-01 binning scheme""")
 parser.add_argument(
  '--doVV', default=False, help="""if True assume we are running the VZ(bb) analysis""")
+parser.add_argument(
+ '--vpt_rw', action='store_true', help="""In case, Vpt reweighting is used instead of deta_reweighting for LO to NLO""")
+parser.add_argument(
+ '--c_split', action='store_true', help="""Spliting LF process into c and udsg processes""")
 parser.add_argument(
  '--mjj',  default=False, help="""if True assume we are running the mjj analysis""")
 parser.add_argument(
@@ -116,6 +120,7 @@ cb = ch.CombineHarvester()
 shapes = os.environ['CMSSW_BASE'] + '/src/CombineHarvester/VH2017/shapes/'
 
 mass = ['125']
+
 
 chns = []
 
@@ -163,22 +168,29 @@ input_folders = {
   'Znn' : folder_map[input_fwks['Znn']] 
 }
 
+if args.c_split:
+    W_LF = ['Wj0b_c','Wj0b_udsg']
+    Z_LF = ['Zj0b_c','Zj0b_udsg']
+else:
+    W_LF = ['Wj0b']
+    Z_LF = ['Zj0b']
+
 if not args.doVV:
   bkg_procs = {
-    'Wen' : ['s_Top','TT','Wj0b','Wj1b','Wj2b','VVHF','VVLF','Zj0b','Zj1b','Zj2b'],
-    'Wmn' : ['s_Top','TT','Wj0b','Wj1b','Wj2b','VVHF','VVLF','Zj0b','Zj1b','Zj2b'],
-    'Zmm' : ['s_Top','TT','VVLF','VVHF','Zj0b','Zj1b','Zj2b'],
-    'Zee' : ['s_Top','TT','VVLF','VVHF','Zj0b','Zj1b','Zj2b'],
+    'Wen' : ['s_Top','TT','Wj1b','Wj2b','VVHF','VVLF','Zj1b','Zj2b'] + W_LF + Z_LF,
+    'Wmn' : ['s_Top','TT','Wj1b','Wj2b','VVHF','VVLF','Zj1b','Zj2b'] + W_LF + Z_LF,
+    'Zmm' : ['s_Top','TT','VVLF','VVHF','Zj1b','Zj2b'] + Z_LF,
+    'Zee' : ['s_Top','TT','VVLF','VVHF','Zj1b','Zj2b'] + Z_LF,
     #'Znn' : ['s_Top','TT','Wj0b','Wj1b','Wj2b','VVHF','VVLF','Zj0b','Zj1b','Zj2b','QCD']
-    'Znn' : ['s_Top','TT','Wj0b','Wj1b','Wj2b','VVHF','VVLF','Zj0b','Zj1b','Zj2b']
+    'Znn' : ['s_Top','TT','Wj1b','Wj2b','VVHF','VVLF','Zj1b','Zj2b'] + W_LF + Z_LF
   }
 else:
   bkg_procs = {
-    'Wen' : ['s_Top','TT','Wj0b','Wj1b','Wj2b','VVLF','Zj0b','Zj1b','Zj2b','WH_hbb','ZH_hbb'],
-    'Wmn' : ['s_Top','TT','Wj0b','Wj1b','Wj2b','VVLF','Zj0b','Zj1b','Zj2b','WH_hbb','ZH_hbb'],
-    'Zmm' : ['s_Top','TT','VVLF','Zj0b','Zj1b','Zj2b','ZH_hbb','ggZH_hbb'],
-    'Zee' : ['s_Top','TT','VVLF','Zj0b','Zj1b','Zj2b','ZH_hbb','ggZH_hbb'],
-    'Znn' : ['s_Top','TT','Wj0b','Wj1b','Wj2b','VVLF','Zj0b','Zj1b','Zj2b','QCD','WH_hbb','ZH_hbb','ggZH_hbb']
+    'Wen' : ['s_Top','TT','Wj1b','Wj2b','VVLF','Zj1b','Zj2b','WH_hbb','ZH_hbb'] + W_LF + Z_LF,
+    'Wmn' : ['s_Top','TT','Wj1b','Wj2b','VVLF','Zj1b','Zj2b','WH_hbb','ZH_hbb'] + W_LF + Z_LF,
+    'Zmm' : ['s_Top','TT','VVLF','Zj1b','Zj2b','ZH_hbb','ggZH_hbb']+ Z_LF,
+    'Zee' : ['s_Top','TT','VVLF','Zj1b','Zj2b','ZH_hbb','ggZH_hbb']+ Z_LF,
+    'Znn' : ['s_Top','TT','Wj1b','Wj2b','VVLF','Zj1b','Zj2b','QCD','WH_hbb','ZH_hbb','ggZH_hbb'] + W_LF + Z_LF
   }
 
 if not args.doVV:
@@ -344,7 +356,7 @@ systs.AddCommonSystematics(cb)
 if year=='2016':
   systs.AddSystematics2016(cb)
 if year=='2017':
-  systs.AddSystematics2017(cb,sfscheme=args.sfscheme)
+  systs.AddSystematics2017(cb,sfscheme=args.sfscheme,args.vpt_rw)
 
 
 if args.bbb_mode==0:
@@ -369,134 +381,130 @@ for chn in chns:
       file, 'BDT_$BIN_$PROCESS', 'BDT_$BIN_$PROCESS_$SYSTEMATIC')
 
 # play with rebinning (and/or cutting) of the shapes
-#if args.rebinning_scheme == 'v1': # Zll only: 1bin in TT/LF, 2bins in HF
-#    binning=np.linspace(0.0,1.0,num=2)
-#    print 'binning in CR for LF,TT fitting variable:',binning,'for channels',['Zee','Zmm']
-#    cb.cp().channel(['Zee','Zmm']).bin_id([3,4,7,8]).VariableRebin(binning)
-#    binning=np.linspace(0.0,1.0,num=3)
-#    print 'binning in CR for HF fitting variable:',binning,'for channels',['Zee','Zmm']
-#    cb.cp().channel(['Zee','Zmm']).bin_id([5,6]).VariableRebin(binning)
+if args.rebinning_scheme == 'v1': # Zll only: 1bin in TT/LF, 2bins in HF
+    binning=np.linspace(0.0,1.0,num=2)
+    print 'binning in CR for LF,TT fitting variable:',binning,'for channels',['Zee','Zmm']
+    cb.cp().channel(['Zee','Zmm']).bin_id([3,4,7,8]).VariableRebin(binning)
+    binning=np.linspace(0.0,1.0,num=3)
+    print 'binning in CR for HF fitting variable:',binning,'for channels',['Zee','Zmm']
+    cb.cp().channel(['Zee','Zmm']).bin_id([5,6]).VariableRebin(binning)
 
-#elif args.rebinning_scheme == 'v2': # all channels: 1bin in TT/LF, 2bins in HF
-#    binning=np.linspace(0.0,1.0,num=2)
-#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-#    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
-#    binning=np.linspace(0.0,1.0,num=3)
-#    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
-#    cb.cp().bin_id([5,6]).VariableRebin(binning)
-    
-#elif args.rebinning_scheme == 'v2-wh-hf-dnn': # all channels: 1bin in TT/LF, 2bins in HF
-#    binning=np.linspace(0.0,1.0,num=2)
-#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-#    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
-#    binning=np.linspace(0.0,1.0,num=3)
-#    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
-#    cb.cp().channel(['Zee','Zmm','Znn']).bin_id([5,6]).VariableRebin(binning)
-#    binning=np.linspace(0.0,5.0,num=6)
-#    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
-#    cb.cp().channel(['Wmn','Wen']).bin_id([5,6]).VariableRebin(binning) 
-#   
-#elif args.rebinning_scheme == 'v2-whznnh-hf-dnn': # all channels: 1bin in TT/LF, 2bins in HF
-#    binning=np.linspace(0.0,1.0,num=2)
-#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-#    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
-#    binning=np.linspace(0.0,1.0,num=3)
-#    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
-#    cb.cp().channel(['Zee','Zmm']).bin_id([5,6]).VariableRebin(binning)
-#    binning=np.linspace(0.0,5.0,num=6)
-#    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
-#    cb.cp().channel(['Wmn','Wen','Znn']).bin_id([5,6]).VariableRebin(binning) 
+elif args.rebinning_scheme == 'v2': # all channels: 1bin in TT/LF, 2bins in HF
+    binning=np.linspace(0.0,1.0,num=2)
+    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
+    binning=np.linspace(0.0,1.0,num=3)
+    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
+    cb.cp().bin_id([5,6]).VariableRebin(binning)
    
-#elif args.rebinning_scheme == 'v3': # all channels: 1bin in TT/LF, no rebin in HF
-#    binning=np.linspace(0.0,1.0,num=2)
-#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-#    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
-#    
-#elif args.rebinning_scheme == 'v4': # all channels: 1bin in TT/LF, no rebin in HF
-#    binning=np.linspace(0.0,1.0,num=3)
-#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-#    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
-#    binning=np.linspace(0.0,1.0,num=5)
-#    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
-#    cb.cp().bin_id([5,6]).VariableRebin(binning)
-#    
-#elif args.rebinning_scheme == 'sr_mva_cut_2bins': # HIG-16-044 style
-#    binning=np.linspace(0.2,1.0,num=13)
-#    print 'binning in SR for fitting variable:',binning
-#    cb.cp().bin_id([1,2]).VariableRebin(binning)
-#
-#elif args.rebinning_scheme == 'v2-whznnh-hf-dnn-massAnalysis': # all channels: 1bin in TT/LF, 2bins in HF
-#    binning=np.linspace(0.,1.0,num=2)
-#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-#    cb.cp().channel(['Zee','Zmm']).bin_id([9,10,11,12]).VariableRebin(binning)
-#    cb.cp().channel(['Wen','Wmn']).bin_id([5,7]).VariableRebin(binning)
-#    cb.cp().channel(['Znn']).bin_id([5,7]).VariableRebin(binning)
-#    binning=np.linspace(0.,1.0,num=3)
-#    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
-#    cb.cp().channel(['Zee','Zmm']).bin_id([13,14]).VariableRebin(binning)
-#    binning=np.linspace(0.0,5.0,num=6)
-#    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
-#    cb.cp().channel(['Wen','Wmn']).bin_id([6]).VariableRebin(binning)
-#    cb.cp().channel(['Znn']).bin_id([6]).VariableRebin(binning)
-#    print 'binning in SR for all channels'
-#    binning=np.linspace(60,150,num=5)
-#    binning=np.append(binning,[160.])
-#    cb.cp().channel(['Zee','Zmm']).bin_id([1,2,3,4,5,6,7,8]).VariableRebin(binning)
-#    cb.cp().channel(['Wen','Wmn','Znn']).bin_id([1,2,3,4]).VariableRebin(binning)
-#elif args.rebinning_scheme == 'v2-whznnh-hf-dnn-massAnalysis-2016': # all channels: 1bin in TT/LF, 2bins in HF
-#    binning=np.linspace(-1.0,1.0,num=2)
-#    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
-#    cb.cp().channel(['Zee','Zmm']).bin_id([9,10,11,12]).VariableRebin(binning)
-#    cb.cp().channel(['Wen','Wmn']).bin_id([5,7]).VariableRebin(binning)
-#    cb.cp().channel(['Znn']).bin_id([5,7]).VariableRebin(binning)
-#    binning=np.linspace(0.,1.0,num=3)
-#    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
-#    cb.cp().channel(['Zee','Zmm']).bin_id([13,14]).VariableRebin(binning)
-#    binning=np.linspace(0.0,5.0,num=6)
-#    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
-#    cb.cp().channel(['Wen','Wmn']).bin_id([6]).VariableRebin(binning)
-#    cb.cp().channel(['Znn']).bin_id([6]).VariableRebin(binning)
-#    print 'binning in SR for all channels'
-#    binning=np.linspace(60,150,num=5)
-#    binning=np.append(binning,[160.])
-#    cb.cp().channel(['Zee','Zmm']).bin_id([1,2,3,4,5,6,7,8]).VariableRebin(binning)
-#    cb.cp().channel(['Wen','Wmn','Znn']).bin_id([1,2,3,4]).VariableRebin(binning)
+elif args.rebinning_scheme == 'v2-wh-hf-dnn': # all channels: 1bin in TT/LF, 2bins in HF
+    binning=np.linspace(0.0,1.0,num=2)
+    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
+    binning=np.linspace(0.0,1.0,num=3)
+    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
+    cb.cp().channel(['Zee','Zmm','Znn']).bin_id([5,6]).VariableRebin(binning)
+    binning=np.linspace(0.0,5.0,num=6)
+    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
+    cb.cp().channel(['Wmn','Wen']).bin_id([5,6]).VariableRebin(binning) 
+   
+elif args.rebinning_scheme == 'v2-whznnh-hf-dnn': # all channels: 1bin in TT/LF, 2bins in HF
+    binning=np.linspace(0.0,1.0,num=2)
+    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
+    binning=np.linspace(0.0,1.0,num=3)
+    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
+    cb.cp().channel(['Zee','Zmm']).bin_id([5,6]).VariableRebin(binning)
+    binning=np.linspace(0.0,5.0,num=6)
+    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
+    cb.cp().channel(['Wmn','Wen','Znn']).bin_id([5,6]).VariableRebin(binning) 
+  
+elif args.rebinning_scheme == 'v3': # all channels: 1bin in TT/LF, no rebin in HF
+    binning=np.linspace(0.0,1.0,num=2)
+    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
+    
+elif args.rebinning_scheme == 'v4': # all channels: 1bin in TT/LF, no rebin in HF
+    binning=np.linspace(0.0,1.0,num=3)
+    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+    cb.cp().bin_id([3,4,7,8]).VariableRebin(binning)
+    binning=np.linspace(0.0,1.0,num=5)
+    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
+    cb.cp().bin_id([5,6]).VariableRebin(binning)
+    
+elif args.rebinning_scheme == 'sr_mva_cut_2bins': # HIG-16-044 style
+    binning=np.linspace(0.2,1.0,num=13)
+    print 'binning in SR for fitting variable:',binning
+    cb.cp().bin_id([1,2]).VariableRebin(binning)
 
-binning_LFlow=np.array([75.0,110.0,150.0])
-print 'binning in CR for LF low fitting variable:',binning_LFlow,'for all the channels'
-cb.cp().bin_id([2]).VariableRebin(binning_LFlow)
+elif args.rebinning_scheme == 'v2-whznnh-hf-dnn-massAnalysis': # all channels: 1bin in TT/LF, 2bins in HF
+    binning=np.linspace(0.,1.0,num=2)
+    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+    cb.cp().channel(['Zee','Zmm']).bin_id([9,10,11,12]).VariableRebin(binning)
+    cb.cp().channel(['Wen','Wmn']).bin_id([5,7]).VariableRebin(binning)
+    cb.cp().channel(['Znn']).bin_id([5,7]).VariableRebin(binning)
+    binning=np.linspace(0.,1.0,num=3)
+    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
+    cb.cp().channel(['Zee','Zmm']).bin_id([13,14]).VariableRebin(binning)
+    binning=np.linspace(0.0,5.0,num=6)
+    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
+    cb.cp().channel(['Wen','Wmn']).bin_id([6]).VariableRebin(binning)
+    cb.cp().channel(['Znn']).bin_id([6]).VariableRebin(binning)
+    print 'binning in SR for all channels'
+    binning=np.linspace(60,150,num=5)
+    binning=np.append(binning,[160.])
+    cb.cp().channel(['Zee','Zmm']).bin_id([1,2,3,4,5,6,7,8]).VariableRebin(binning)
+    cb.cp().channel(['Wen','Wmn','Znn']).bin_id([1,2,3,4]).VariableRebin(binning)
+elif args.rebinning_scheme == 'v2-whznnh-hf-dnn-massAnalysis-2016': # all channels: 1bin in TT/LF, 2bins in HF
+    binning=np.linspace(-1.0,1.0,num=2)
+    print 'binning in CR for LF,TT fitting variable:',binning,'for all the channels'
+    cb.cp().channel(['Zee','Zmm']).bin_id([9,10,11,12]).VariableRebin(binning)
+    cb.cp().channel(['Wen','Wmn']).bin_id([5,7]).VariableRebin(binning)
+    cb.cp().channel(['Znn']).bin_id([5,7]).VariableRebin(binning)
+    binning=np.linspace(0.,1.0,num=3)
+    print 'binning in CR for HF fitting variable:',binning,'for all Zll and Znn channels'
+    cb.cp().channel(['Zee','Zmm']).bin_id([13,14]).VariableRebin(binning)
+    binning=np.linspace(0.0,5.0,num=6)
+    print 'binning in CR for HF fitting variable:',binning,'for all the channels'
+    cb.cp().channel(['Wen','Wmn']).bin_id([6]).VariableRebin(binning)
+    cb.cp().channel(['Znn']).bin_id([6]).VariableRebin(binning)
+    print 'binning in SR for all channels'
+    binning=np.linspace(60,150,num=5)
+    binning=np.append(binning,[160.])
+    cb.cp().channel(['Zee','Zmm']).bin_id([1,2,3,4,5,6,7,8]).VariableRebin(binning)
+    cb.cp().channel(['Wen','Wmn','Znn']).bin_id([1,2,3,4]).VariableRebin(binning)
 
-binning_TTlow=np.array([75.0,150.0])
-print 'binning in CR for TT low fitting variable:',binning_TTlow,'for all the channels'
-cb.cp().bin_id([4]).VariableRebin(binning_TTlow)
+elif args.rebinning_scheme == 'V11CRobs': # all channels: HIG-20-01 rebinning scheme
+    binning_LFlow=np.array([75.0,110.0,150.0])
+    print 'binning in CR for LF low fitting variable:',binning_LFlow,'for all the channels'
+    cb.cp().bin_id([2]).VariableRebin(binning_LFlow)
 
-binning_LFmed=np.array([150.0,200.0,250.0])
-print 'binning in CR for LF med fitting variable:',binning_LFmed,'for all the channels'
-cb.cp().bin_id([6]).VariableRebin(binning_LFmed)
+    binning_TTlow=np.array([75.0,150.0])
+    print 'binning in CR for TT low fitting variable:',binning_TTlow,'for all the channels'
+    cb.cp().bin_id([4]).VariableRebin(binning_TTlow)
 
-binning_TTmed=np.array([150.0,250.0])
-print 'binning in CR for TT med fitting variable:',binning_TTmed,'for all the channels'
-cb.cp().bin_id([8]).VariableRebin(binning_TTmed)
+    binning_LFmed=np.array([150.0,200.0,250.0])
+    print 'binning in CR for LF med fitting variable:',binning_LFmed,'for all the channels'
+    cb.cp().bin_id([6]).VariableRebin(binning_LFmed)
 
-binning_LFhigh=np.array([250.0,300.0,400.0,2000.0])
-print 'binning in CR for LF high fitting variable:',binning_LFhigh,'for all the channels'
-cb.cp().bin_id([14]).VariableRebin(binning_LFhigh)
+    binning_TTmed=np.array([150.0,250.0])
+    print 'binning in CR for TT med fitting variable:',binning_TTmed,'for all the channels'
+    cb.cp().bin_id([8]).VariableRebin(binning_TTmed)
 
-binning_TThigh=np.array([250.0,2000.0])
-print 'binning in CR for TT high fitting variable:',binning_TThigh,'for all the channels'
-cb.cp().bin_id([16]).VariableRebin(binning_TThigh)
+    binning_LFhigh=np.array([250.0,300.0,400.0,2000.0])
+    print 'binning in CR for LF high fitting variable:',binning_LFhigh,'for all the channels'
+    cb.cp().bin_id([14]).VariableRebin(binning_LFhigh)
 
-binning=np.linspace(2.0,5.0,num=4)
-print 'binning in CR for HF fitting variable:',binning,'for all Zll channel'
-cb.cp().channel(['Zee','Zmm']).bin_id([3,7,15]).VariableRebin(binning)
+    binning_TThigh=np.array([250.0,2000.0])
+    print 'binning in CR for TT high fitting variable:',binning_TThigh,'for all the channels'
+    cb.cp().bin_id([16]).VariableRebin(binning_TThigh)
+
+    binning=np.linspace(2.0,5.0,num=4)
+    print 'binning in CR for HF fitting variable:',binning,'for all Zll channel'
+    cb.cp().channel(['Zee','Zmm']).bin_id([3,7,15]).VariableRebin(binning)
 
 
 
-
-cb.FilterProcs(lambda x: drop_zero_procs(cb,x))
-cb.FilterSysts(lambda x: drop_zero_systs(x))
-#Drop QCD in Z+HF CR
-cb.FilterProcs(lambda x: drop_znnqcd(cb,x))
 
 if year=='2016':
     cb.cp().syst_name(["CMS_res_j_13TeV_2016"]).ForEachProc(lambda x:symmetrise_syst(cb,x,'CMS_res_j_13TeV_2016'))
@@ -511,22 +519,30 @@ if args.doVV:
     cb.FilterSysts(lambda x: x.name() in "CMS_vhbb_VV")
 
 if year=='2017':
-    cb.cp().process(['Wj0b']).ForEachProc(lambda x: increase_bin_errors(x))
+    cb.cp().process(W_LF).ForEachProc(lambda x: increase_bin_errors(x))
     cb.cp().channel(['Wen','Wmn']).process(['VVHF','VVLF']).ForEachProc(lambda x: increase_bin_errors(x))
-
-cb.cp().channel(['Wen','Wmn','Znn']).process(['Wj0b']).RenameSystematic(cb,'CMS_vhbb_vjetnlodetajjrw_13TeV','CMS_W0b_vhbb_vjetnlodetajjrw_13TeV')
-cb.cp().channel(['Wen','Wmn','Znn']).process(['Wj1b']).RenameSystematic(cb,'CMS_vhbb_vjetnlodetajjrw_13TeV','CMS_W1b_vhbb_vjetnlodetajjrw_13TeV')
-cb.cp().channel(['Wen','Wmn','Znn']).process(['Wj2b']).RenameSystematic(cb,'CMS_vhbb_vjetnlodetajjrw_13TeV','CMS_W2b_vhbb_vjetnlodetajjrw_13TeV')
-cb.cp().channel(['Zee','Zmm','Znn']).process(['Zj0b']).RenameSystematic(cb,'CMS_vhbb_vjetnlodetajjrw_13TeV','CMS_Z0b_vhbb_vjetnlodetajjrw_13TeV')
-cb.cp().channel(['Zee','Zmm','Znn']).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_vjetnlodetajjrw_13TeV','CMS_Z1b_vhbb_vjetnlodetajjrw_13TeV')
-cb.cp().channel(['Zee','Zmm','Znn']).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_vjetnlodetajjrw_13TeV','CMS_Z2b_vhbb_vjetnlodetajjrw_13TeV')
+if args.vpt_rw:
+    for nloWeight in ['ZJets0','ZJets1','ZJets2','ZBJets1','ZBJets2','WJets0','WJets1','WJets2','WBJets1','WBJets2','DYJets0','DYJets1','DYJets2','DYBJets1','DYBJets2']:
+        cb.cp().RenameSystematic(cb, 'CMS_vhbb_vjetnlovptrw_' + nloWeight  + '_13TeV', 'CMS_vhbb_vjetnlovptrw_' + nloWeight  + '_13TeV' + year)
+else:
+    cb.cp().channel(['Wen','Wmn','Znn']).process(W_LF).RenameSystematic(cb,'CMS_vhbb_vjetnlodetajjrw_13TeV','CMS_W0b_vhbb_vjetnlodetajjrw_13TeV')
+    cb.cp().channel(['Wen','Wmn','Znn']).process(['Wj1b']).RenameSystematic(cb,'CMS_vhbb_vjetnlodetajjrw_13TeV','CMS_W1b_vhbb_vjetnlodetajjrw_13TeV')
+    cb.cp().channel(['Wen','Wmn','Znn']).process(['Wj2b']).RenameSystematic(cb,'CMS_vhbb_vjetnlodetajjrw_13TeV','CMS_W2b_vhbb_vjetnlodetajjrw_13TeV')
+    cb.cp().channel(['Zee','Zmm','Znn']).process(Z_LF).RenameSystematic(cb,'CMS_vhbb_vjetnlodetajjrw_13TeV','CMS_Z0b_vhbb_vjetnlodetajjrw_13TeV')
+    cb.cp().channel(['Zee','Zmm','Znn']).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_vjetnlodetajjrw_13TeV','CMS_Z1b_vhbb_vjetnlodetajjrw_13TeV')
+    cb.cp().channel(['Zee','Zmm','Znn']).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_vjetnlodetajjrw_13TeV','CMS_Z2b_vhbb_vjetnlodetajjrw_13TeV')
 #cb.cp().signals().RenameSystematic(cb,'CMS_res_j_reg_13TeV','CMS_signal_resolution_13TeV')
 #cb.cp().channel(['Wen','Wmn','Znn']).RenameSystematic(cb,'CMS_res_j_reg_13TeV','CMS_NoKinFit_res_j_reg_13TeV')
 #cb.cp().channel(['Zee','Zmm']).RenameSystematic(cb,'CMS_res_j_reg_13TeV','CMS_KinFit_res_j_reg_13TeV')
 
 
 cb.SetGroup('signal_theory',['pdf_Higgs.*','BR_hbb','QCDscale_ggZH','QCDscale_VH','CMS_vhbb_boost.*','.*LHE_weights.*ZH.*','.*LHE_weights.*WH.*','.*LHE_weights.*ggZH.*'])
-cb.SetGroup('bkg_theory',['pdf_qqbar','pdf_gg','CMS_vhbb_VV','CMS_vhbb_ST','.*LHE_weights.*TT.*','.*LHE_weights.*VV.*','.*LHE_weights.*Zj0b.*','LHE_weights.*Zj1b.*','LHE_weights.*Zj2b.*','LHE_weights.*Wj0b.*','LHE_weights.*Wj1b.*','LHE_weights.*Wj2b.*','LHE_weights.*s_Top.*','LHE_weights.*QCD.*'])
+
+if not args.c_split:
+    cb.SetGroup('bkg_theory',['pdf_qqbar','pdf_gg','CMS_vhbb_VV','CMS_vhbb_ST','.*LHE_weights.*TT.*','.*LHE_weights.*VV.*','.*LHE_weights.*Zj0b.*','LHE_weights.*Zj1b.*','LHE_weights.*Zj2b.*','LHE_weights.*Wj0b.*','LHE_weights.*Wj1b.*','LHE_weights.*Wj2b.*','LHE_weights.*s_Top.*','LHE_weights.*QCD.*'])
+else:
+    cb.SetGroup('bkg_theory',['pdf_qqbar','pdf_gg','CMS_vhbb_VV','CMS_vhbb_ST','.*LHE_weights.*TT.*','.*LHE_weights.*VV.*','.*LHE_weights.*Zj0b_c.*','.*LHE_weights.*Zj0b_udsg.*','LHE_weights.*Zj1b.*','LHE_weights.*Zj2b.*','LHE_weights.*Wj0b_c.*','LHE_weights.*Wj0b_udsg.*','LHE_weights.*Wj1b.*','LHE_weights.*Wj2b.*','LHE_weights.*s_Top.*','LHE_weights.*QCD.*'])
+
 cb.SetGroup('sim_modelling',['CMS_vhbb_ptwweights.*','CMS_vhbb_vjetnlodetajjrw.*'])
 cb.SetGroup('jes',['CMS_scale_j.*'])
 #cb.SetGroup('jer',['CMS_res_j.*','CMS_signal_resolution.*'])
@@ -543,26 +559,50 @@ cb.SetGroup('met',['.*MET.*'])
 
 
 if args.sfscheme == "catmig":
-  for chan,name in zip([['Wen','Wmn'],['Znn']],['Wln','Znn']):
-    cb.cp().channel(chan).process(['Zj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj0b_13TeV'+year+name)
-    cb.cp().channel(chan).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj1b_13TeV'+year+name)
-    cb.cp().channel(chan).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj2b_13TeV'+year+name)
-    cb.cp().channel(chan).process(['Wj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj0b_13TeV'+year+name)
-    cb.cp().channel(chan).process(['Wj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj1b_13TeV'+year+name)
-    cb.cp().channel(chan).process(['Wj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj2b_13TeV'+year+name)
- 
-    cb.cp().channel(chan).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_TT_13TeV'+year+name)
- 
-  chan="Zll"
-  cb.cp().channel(["Zee","Zmm"]).process(['Zj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj0b_13TeV'+year+chan)
-  cb.cp().channel(["Zee","Zmm"]).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj1b_13TeV'+year+chan)
-  cb.cp().channel(["Zee","Zmm"]).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj2b_13TeV'+year+chan)
-  cb.cp().channel(["Zee","Zmm"]).process(['Zj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj0b_13TeV'+year+chan)
-  cb.cp().channel(["Zee","Zmm"]).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj1b_13TeV'+year+chan)
-  cb.cp().channel(["Zee","Zmm"]).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj2b_13TeV'+year+chan)
-  cb.cp().channel(["Zee","Zmm"]).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_TT_13TeV'+year+chan)
-  cb.cp().channel(["Zee","Zmm"]).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_TT_13TeV'+year+chan)
-
+  if not args.c_split:
+      for chan,name in zip([['Wen','Wmn'],['Znn']],['Wln','Znn']):
+	cb.cp().channel(chan).process(['Zj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj0b_13TeV'+year+name)
+	cb.cp().channel(chan).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj1b_13TeV'+year+name)
+	cb.cp().channel(chan).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj2b_13TeV'+year+name)
+	cb.cp().channel(chan).process(['Wj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj0b_13TeV'+year+name)
+	cb.cp().channel(chan).process(['Wj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj1b_13TeV'+year+name)
+	cb.cp().channel(chan).process(['Wj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj2b_13TeV'+year+name)
+     
+	cb.cp().channel(chan).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_TT_13TeV'+year+name)
+     
+      chan="Zll"
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj0b_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj1b_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj2b_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj0b_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj1b_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj2b_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_TT_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_TT_13TeV'+year+chan)
+  else:
+      for chan,name in zip([['Wen','Wmn'],['Znn']],['Wln','Znn']):
+	cb.cp().channel(chan).process(['Zj0b_c']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj0b_c_13TeV'+year+name)
+	cb.cp().channel(chan).process(['Zj0b_udsg']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj0b_udsg_13TeV'+year+name)
+	cb.cp().channel(chan).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj1b_13TeV'+year+name)
+	cb.cp().channel(chan).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj2b_13TeV'+year+name)
+	cb.cp().channel(chan).process(['Wj0b_c']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj0b_c_13TeV'+year+name)
+	cb.cp().channel(chan).process(['Wj0b_udsg']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj0b_udsg_13TeV'+year+name)
+	cb.cp().channel(chan).process(['Wj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj1b_13TeV'+year+name)
+	cb.cp().channel(chan).process(['Wj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj2b_13TeV'+year+name)
+     
+	cb.cp().channel(chan).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_TT_13TeV'+year+name)
+     
+      chan="Zll"
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj0b_c']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj0b_c_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj0b_udsg']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj0b_udsg_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj1b_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj2b_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj0b_c']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj0b_c_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj0b_udsg']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj0b_udsg_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj1b_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj2b_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_TT_13TeV'+year+chan)
+      cb.cp().channel(["Zee","Zmm"]).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_TT_13TeV'+year+chan)
 
 
 
@@ -570,6 +610,11 @@ rebin = ch.AutoRebin().SetBinThreshold(0.).SetBinUncertFraction(1.0).SetRebinMod
 
 #binning=np.linspace(0.2,1.0,num=13)
 #print binning
+
+cb.FilterProcs(lambda x: drop_zero_procs(cb,x))
+cb.FilterSysts(lambda x: drop_zero_systs(x))
+#Drop QCD in Z+HF CR
+cb.FilterProcs(lambda x: drop_znnqcd(cb,x))
 
 
 if args.auto_rebin:
