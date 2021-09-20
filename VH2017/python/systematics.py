@@ -259,17 +259,17 @@ def AddSystematics2017(cb,sfscheme,vpt_rw):
     year="2017"
 
 
-    for proc in ['TT','Zj0b','Zj1b','Zj2b']:
+    for proc in ['TT','Zj0b','Zj0b_c','Zj0b_udsg','Zj1b','Zj2b']:
         cb.cp().channel(['Znn']).process([proc]).AddSyst(cb,
           'SF_'+proc+'_Znn_'+year, 'rateParam', ch.SystMap('bin_id')
           ([5,6,7,8,9,13,14,15,16,17,21,22,23,24,18,19,20],1.0))
-    cb.cp().channel(['Znn']).process(['Zj0b','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
+    cb.cp().channel(['Znn']).process(['Zj0b','Zj0b_c','Zj0b_udsg','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
     # Znn
-    for proc in ['TT','Zj0b','Zj1b','Zj2b']:
+    for proc in ['TT','Zj0b','Zj0b_c','Zj0b_udsg','Zj1b','Zj2b']:
         cb.cp().channel(['Znn']).process([proc]).AddSyst(cb,
           'SF_'+proc+'_Znn_'+year, 'rateParam', ch.SystMap('bin_id')
           ([5,6,7,8,9,13,14,15,16,17,21,22,23,24,18,19,20],1.0))
-    cb.cp().channel(['Znn']).process(['Zj0b','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
+    cb.cp().channel(['Znn']).process(['Zj0b','Zj0b_c','Zj0b_udsg','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
 
     # Wln
     for proc in ['TT']: 
@@ -279,69 +279,25 @@ def AddSystematics2017(cb,sfscheme,vpt_rw):
           ([5,6,7,8,9,13,14,15,16,17,21,22,23,24,18,19,20],1.0))
         
        
-    for proc in ['Wj0b','Wj1b','Wj2b']:
+    for proc in ['Wj0b','Wj0b_c','Wj0b_udsg','Wj1b','Wj2b']:
        
         cb.cp().channel(['Wen','Wmn','Znn']).process([proc]).AddSyst(cb,
           'SF_'+proc+'_Wln_'+year, 'rateParam', ch.SystMap('bin_id')
           ([5,6,7,8,9,13,14,15,16,17,21,22,23,24,18,19,20],1.0))
 
-    cb.cp().channel(['Wen','Wmn']).process(['Wj0b','Wj1b','Wj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
-    cb.cp().channel(['Znn']).process(['Wj0b','Wj1b','Wj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
+    cb.cp().channel(['Wen','Wmn']).process(['Wj0b','Wj0b_c','Wj0b_udsg','Wj1b','Wj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
+    cb.cp().channel(['Znn']).process(['Wj0b','Wj0b_c','Wj0b_udsg','Wj1b','Wj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
 
 
     # Zll
-    for proc in ['TT','Zj0b','Zj1b','Zj2b']:
+    for proc in ['TT','Zj0b','Zj0b_c','Zj0b_udsg','Zj1b','Zj2b']:
        
         cb.cp().channel(['Zee','Zmm']).process([proc]).AddSyst(cb,
           'SF_'+proc+'_Zll_'+year, 'rateParam', ch.SystMap('bin_id')
           ([1,2,3,4,5,6,7,8,9,13,14,15,16,17,21,22,23,24,18,19,20],1.0))
-
-
    
-    cb.cp().channel(["Zee","Zmm"]).process(['Zj0b','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt150_13TeV','shape',ch.SystMap()(1.0))
-    cb.cp().channel(["Zee","Zmm"]).process(['Zj0b','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
-
-#    for proc in ['TT','Zj0b_c','Zj0b_udsg','Zj1b','Zj2b']:
-#        cb.cp().channel(['Znn']).process([proc]).AddSyst(cb,
-#          'SF_'+proc+'_Znn_'+year, 'rateParam', ch.SystMap('bin_id')
-#          ([5,6,7,8,9,13,14,15,16,17,21,22,23,24,18,19,20],1.0))
-#    cb.cp().channel(['Znn']).process(['Zj0b_c','Zj0b_udsg','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
-#    # Znn
-#    for proc in ['TT','Zj0b_c','Zj0b_udsg','Zj1b','Zj2b']:
-#        cb.cp().channel(['Znn']).process([proc]).AddSyst(cb,
-#          'SF_'+proc+'_Znn_'+year, 'rateParam', ch.SystMap('bin_id')
-#          ([5,6,7,8,9,13,14,15,16,17,21,22,23,24,18,19,20],1.0))
-#    cb.cp().channel(['Znn']).process(['Zj0b_c','Zj0b_udsg','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
-#
-#    # Wln
-#    for proc in ['TT']: 
-#
-#        cb.cp().channel(['Wen','Wmn']).process([proc]).AddSyst(cb,
-#          'SF_'+proc+'_Wln_'+year, 'rateParam', ch.SystMap('bin_id')
-#          ([5,6,7,8,9,13,14,15,16,17,21,22,23,24,18,19,20],1.0))
-#        
-#       
-#    for proc in ['Wj0b_c','Wj0b_udsg','Wj1b','Wj2b']:
-#       
-#        cb.cp().channel(['Wen','Wmn','Znn']).process([proc]).AddSyst(cb,
-#          'SF_'+proc+'_Wln_'+year, 'rateParam', ch.SystMap('bin_id')
-#          ([5,6,7,8,9,13,14,15,16,17,21,22,23,24,18,19,20],1.0))
-#
-#    cb.cp().channel(['Wen','Wmn']).process(['Wj0b_c','Wj0b_udsg','Wj1b','Wj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
-#    cb.cp().channel(['Znn']).process(['Wj0b_c','Wj0b_udsg','Wj1b','Wj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
-#
-#
-#    # Zll
-#    for proc in ['TT','Zj0b_c','Zj0b_udsg','Zj1b','Zj2b']:
-#       
-#        cb.cp().channel(['Zee','Zmm']).process([proc]).AddSyst(cb,
-#          'SF_'+proc+'_Zll_'+year, 'rateParam', ch.SystMap('bin_id')
-#          ([1,2,3,4,5,6,7,8,9,13,14,15,16,17,21,22,23,24,18,19,20],1.0))
-#
-#
-#   
-#    cb.cp().channel(["Zee","Zmm"]).process(['Zj0b_c','Zj0b_udsg','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt150_13TeV','shape',ch.SystMap()(1.0))
-#    cb.cp().channel(["Zee","Zmm"]).process(['Zj0b_c','Zj0b_udsg','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
+    cb.cp().channel(["Zee","Zmm"]).process(['Zj0b','Zj0b_c','Zj0b_udsg','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt150_13TeV','shape',ch.SystMap()(1.0))
+    cb.cp().channel(["Zee","Zmm"]).process(['Zj0b','Zj0b_c','Zj0b_udsg','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
 
     #Set a sensible range for the rate params
     for syst in cb.cp().syst_type(["rateParam"]).syst_name_set():
