@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import CombineHarvester.CombineTools.ch as ch
-import CombineHarvester.VH2017.systematics as systs
+import CombineHarvester.VH2017.systematics_HIG18016 as systs
 import ROOT as R
 import glob
 import numpy as np
@@ -101,6 +101,8 @@ parser.add_argument(
 parser.add_argument(
  '--doVV', default=False, help="""if True assume we are running the VZ(bb) analysis""")
 parser.add_argument(
+        '--sfscheme', default="HIG18016",help="""Process SF scheme. HIG18016 has separate low/high Vpt SFs. catmig has SFs inclusive in Vpt plus Vpt category migraions""") 
+parser.add_argument(
  '--mjj',  default=False, help="""if True assume we are running the mjj analysis""")
 
 args = parser.parse_args()
@@ -168,8 +170,8 @@ if not args.doVV:
     'Wmn' : ['s_Top','TT','Wj0b','Wj1b','Wj2b','VVHF','VVLF','Zj0b','Zj1b','Zj2b'],
     'Zmm' : ['s_Top','TT','VVLF','VVHF','Zj0b','Zj1b','Zj2b'],
     'Zee' : ['s_Top','TT','VVLF','VVHF','Zj0b','Zj1b','Zj2b'],
-    #'Znn' : ['s_Top','TT','Wj0b','Wj1b','Wj2b','VVHF','VVLF','Zj0b','Zj1b','Zj2b','QCD']
-    'Znn' : ['s_Top','TT','Wj0b','Wj1b','Wj2b','VVHF','VVLF','Zj0b','Zj1b','Zj2b']
+    'Znn' : ['s_Top','TT','Wj0b','Wj1b','Wj2b','VVHF','VVLF','Zj0b','Zj1b','Zj2b','QCD']
+    #'Znn' : ['s_Top','TT','Wj0b','Wj1b','Wj2b','VVHF','VVLF','Zj0b','Zj1b','Zj2b']
   }
 else:
   bkg_procs = {
@@ -283,7 +285,7 @@ systs.AddCommonSystematics(cb)
 if year=='2016':
   systs.AddSystematics2016(cb)
 if year=='2017':
-  systs.AddSystematics2017(cb)
+  systs.AddSystematics2017(cb,sfscheme=args.sfscheme)
 
 
 if args.bbb_mode==0:
@@ -445,6 +447,26 @@ cb.SetGroup('lep_eff',['.*eff_e.*','.*eff_m.*'])
 cb.SetGroup('met',['.*MET.*'])
 
 
+if args.sfscheme == "catmig":
+  for chan,name in zip([['Wen','Wmn'],['Znn']],['Wln','Znn']):
+    cb.cp().channel(chan).process(['Zj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj0b_13TeV'+year+name)
+    cb.cp().channel(chan).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj1b_13TeV'+year+name)
+    cb.cp().channel(chan).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Zj2b_13TeV'+year+name)
+    cb.cp().channel(chan).process(['Wj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj0b_13TeV'+year+name)
+    cb.cp().channel(chan).process(['Wj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj1b_13TeV'+year+name)
+    cb.cp().channel(chan).process(['Wj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_Wj2b_13TeV'+year+name)
+ 
+    cb.cp().channel(chan).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_TT_13TeV'+year+name)
+ 
+  chan="Zll"
+  cb.cp().channel(["Zee","Zmm"]).process(['Zj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj0b_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj1b_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_DYj2b_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['Zj0b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj0b_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['Zj1b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj1b_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['Zj2b']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_DYj2b_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt250_13TeV','CMS_vhbb_Vpt250_TT_13TeV'+year+chan)
+  cb.cp().channel(["Zee","Zmm"]).process(['TT']).RenameSystematic(cb,'CMS_vhbb_Vpt150_13TeV','CMS_vhbb_Vpt150_TT_13TeV'+year+chan)
 
 #To rename processes:
 #cb.cp().ForEachObj(lambda x: x.set_process("WH_lep") if x.process()=='WH_hbb' else None)
@@ -474,29 +496,29 @@ writer.SetVerbosity(0);
                 
 #Combined:
 writer.WriteCards("cmb",cb);
-writer.WriteCards("cmb_CRonly",cb.cp().bin_id([3,4,5,6,7,8]));
-
-#Per channel:
-for chn in chns:
-  writer.WriteCards(chn,cb.cp().channel([chn]))
-
-if 'Znn' in chns:
-  #writer.WriteCards("Znn",cb.cp().FilterAll(lambda x: not (x.channel()=='Znn' or ( (x.channel() in ['Wmn','Wen']) and x.bin_id() in [3,4,5,6,7,8]))))
-  if not args.mjj:
-      writer.WriteCards("Znn",cb.cp().channel(['Znn']))
-      writer.WriteCards("Znn",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Wmn','Wen']))
-      writer.WriteCards("Znn_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Znn','Wmn','Wen']))
-  else:
-      writer.WriteCards("Znn",cb.cp().channel(['Znn']))
-      writer.WriteCards("Znn",cb.cp().bin_id([5,6,7,8]).channel(['Wmn','Wen']))
-      writer.WriteCards("Znn_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Znn']))
-      writer.WriteCards("Znn_CRonly",cb.cp().bin_id([5,6,7,8]).channel(['Wmn','Wen']))
-
-#Zll and Wln:
-if 'Wen' in chns and 'Wmn' in chns:
-  writer.WriteCards("Wln",cb.cp().channel(['Wen','Wmn']))
-  writer.WriteCards("Wln_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Wen','Wmn']))
-
-if 'Zee' in chns and 'Zmm' in chns:
-  writer.WriteCards("Zll",cb.cp().channel(['Zee','Zmm']))
-  writer.WriteCards("Zll_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Zee','Zmm']))
+#writer.WriteCards("cmb_CRonly",cb.cp().bin_id([3,4,5,6,7,8]));
+#
+##Per channel:
+#for chn in chns:
+#  writer.WriteCards(chn,cb.cp().channel([chn]))
+#
+#if 'Znn' in chns:
+#  #writer.WriteCards("Znn",cb.cp().FilterAll(lambda x: not (x.channel()=='Znn' or ( (x.channel() in ['Wmn','Wen']) and x.bin_id() in [3,4,5,6,7,8]))))
+#  if not args.mjj:
+#      writer.WriteCards("Znn",cb.cp().channel(['Znn']))
+#      writer.WriteCards("Znn",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Wmn','Wen']))
+#      writer.WriteCards("Znn_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Znn','Wmn','Wen']))
+#  else:
+#      writer.WriteCards("Znn",cb.cp().channel(['Znn']))
+#      writer.WriteCards("Znn",cb.cp().bin_id([5,6,7,8]).channel(['Wmn','Wen']))
+#      writer.WriteCards("Znn_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Znn']))
+#      writer.WriteCards("Znn_CRonly",cb.cp().bin_id([5,6,7,8]).channel(['Wmn','Wen']))
+#
+##Zll and Wln:
+#if 'Wen' in chns and 'Wmn' in chns:
+#  writer.WriteCards("Wln",cb.cp().channel(['Wen','Wmn']))
+#  writer.WriteCards("Wln_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Wen','Wmn']))
+#
+#if 'Zee' in chns and 'Zmm' in chns:
+#  writer.WriteCards("Zll",cb.cp().channel(['Zee','Zmm']))
+#  writer.WriteCards("Zll_CRonly",cb.cp().bin_id([3,4,5,6,7,8]).channel(['Zee','Zmm']))
