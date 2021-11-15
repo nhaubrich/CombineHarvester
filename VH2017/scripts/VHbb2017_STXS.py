@@ -104,6 +104,8 @@ parser.add_argument(
  '--mjj',  default=False, help="""if True assume we are running the mjj analysis""")
 parser.add_argument(
         '--sfscheme', default="HIG18016",help="""Process SF scheme. HIG18016 has separate low/high Vpt SFs. catmig has SFs inclusive in Vpt plus Vpt category migraions""") 
+parser.add_argument(
+        '--SRDNNs', default="",help="""Select SR DNNs: either blank for default (likely V11), 'V5redo', or 'V11redo' (18016 selection but 20-001 features) """) 
 args = parser.parse_args()
 
 cb = ch.CombineHarvester()
@@ -275,59 +277,61 @@ if args.mjj:
 lowSuffix = ""
 #lowSuffix = "50" #uncomment for 50GeV Vpt boundary
 
+dnnfix = args.SRDNNs
+dnnfixZll = ""
 cats = {
   'Zee' : [
-    (1, 'SR_low%s_Zee'%(lowSuffix)), (2, 'Zlf_low%s_Zee'%(lowSuffix)), (3, 'Zhf_low%s_Zee'%(lowSuffix)), (4, 'ttbar_low%s_Zee'%(lowSuffix)),
-    (5, 'SR_med_Zee_0j'), (6, 'Zlf_med_Zee'), (7, 'Zhf_med_Zee'), (8, 'ttbar_med_Zee'),
-    (9, 'SR_med_Zee_ge1j'), 
+    (1, 'SR'+dnnfixZll+'_low%s_Zee'%(lowSuffix)), (2, 'Zlf_low%s_Zee'%(lowSuffix)), (3, 'Zhf_low%s_Zee'%(lowSuffix)), (4, 'ttbar_low%s_Zee'%(lowSuffix)),
+    (5, 'SR'+dnnfixZll+'_med_Zee_0j'), (6, 'Zlf_med_Zee'), (7, 'Zhf_med_Zee'), (8, 'ttbar_med_Zee'),
+    (9, 'SR'+dnnfixZll+'_med_Zee_ge1j'), 
     (14, 'Zlf_high_Zee'), (15, 'Zhf_high_Zee'), (16, 'ttbar_high_Zee'),
-    (21, 'SR_high1_Zee'),  (23, 'SR_high2_Zee'), 
+    (21, 'SR'+dnnfixZll+'_high1_Zee'),  (23, 'SR'+dnnfixZll+'_high2_Zee'), 
   ],
   'Zmm' : [
-    (1, 'SR_low%s_Zmm'%(lowSuffix)), (2, 'Zlf_low%s_Zmm'%(lowSuffix)), (3, 'Zhf_low%s_Zmm'%(lowSuffix)), (4, 'ttbar_low%s_Zmm'%(lowSuffix)),
-    (5, 'SR_med_Zmm_0j'), (6, 'Zlf_med_Zmm'), (7, 'Zhf_med_Zmm'), (8, 'ttbar_med_Zmm'),
-    (9, 'SR_med_Zmm_ge1j'),
+    (1, 'SR'+dnnfixZll+'_low%s_Zmm'%(lowSuffix)), (2, 'Zlf_low%s_Zmm'%(lowSuffix)), (3, 'Zhf_low%s_Zmm'%(lowSuffix)), (4, 'ttbar_low%s_Zmm'%(lowSuffix)),
+    (5, 'SR'+dnnfixZll+'_med_Zmm_0j'), (6, 'Zlf_med_Zmm'), (7, 'Zhf_med_Zmm'), (8, 'ttbar_med_Zmm'),
+    (9, 'SR'+dnnfixZll+'_med_Zmm_ge1j'),
     (14, 'Zlf_high_Zmm'), (15, 'Zhf_high_Zmm'), (16, 'ttbar_high_Zmm'),
-    (21, 'SR_high1_Zmm'),  (23, 'SR_high2_Zmm'), 
+    (21, 'SR'+dnnfixZll+'_high1_Zmm'),  (23, 'SR'+dnnfixZll+'_high2_Zmm'), 
   ],
   'Znn' : [
-    (5, 'SR_med_Znn_0j'), (6, 'Zlf_med_Znn'), (7, 'Zhf_med_Znn'), (8, 'ttbar_med_Znn'),
-    (9, 'SR_med_Znn_ge1j'),
+    (5, 'SR'+dnnfix+'_med_Znn_0j'), (6, 'Zlf_med_Znn'), (7, 'Zhf_med_Znn'), (8, 'ttbar_med_Znn'),
+    (9, 'SR'+dnnfix+'_med_Znn_ge1j'),
     (14, 'Zlf_high_Znn'), (15, 'Zhf_high_Znn'), (16, 'ttbar_high_Znn'),
-    (21, 'SR_high1_Znn'),  (23, 'SR_high2_Znn'), 
+    (21, 'SR'+dnnfix+'_high1_Znn'),  (23, 'SR'+dnnfix+'_high2_Znn'), 
   ],
  'Wen' : [
-    (5, 'SR_med_Wen'), (6, 'Wlf_med_Wen'), (7, 'Whf_med_Wen'), (8, 'ttbar_med_Wen'),
+    (5, 'SR'+dnnfix+'_med_Wen'), (6, 'Wlf_med_Wen'), (7, 'Whf_med_Wen'), (8, 'ttbar_med_Wen'),
     (14, 'Wlf_high_Wen'), (15, 'Whf_high_Wen'), (16, 'ttbar_high_Wen'),
-    (21, 'SR_high1_Wen'),  (23, 'SR_high2_Wen'), 
+    (21, 'SR'+dnnfix+'_high1_Wen'),  (23, 'SR'+dnnfix+'_high2_Wen'), 
 
   ],
  'Wmn' : [
-    (5, 'SR_med_Wmn'), (6, 'Wlf_med_Wmn'), (7, 'Whf_med_Wmn'), (8, 'ttbar_med_Wmn'),
+    (5, 'SR'+dnnfix+'_med_Wmn'), (6, 'Wlf_med_Wmn'), (7, 'Whf_med_Wmn'), (8, 'ttbar_med_Wmn'),
     (14, 'Wlf_high_Wmn'), (15, 'Whf_high_Wmn'), (16, 'ttbar_high_Wmn'),
-    (21, 'SR_high1_Wmn'), (23, 'SR_high2_Wmn'), 
+    (21, 'SR'+dnnfix+'_high1_Wmn'), (23, 'SR'+dnnfix+'_high2_Wmn'), 
   ]
 }
 sig_cats = {
   'Zee' : [
-    (1, 'SR_low%s_Zee'%(lowSuffix)), (5, 'SR_med_Zee_0j'),(9,'SR_med_Zee_ge1j'),
-    (21, 'SR_high1_Zee'),  (23, 'SR_high2_Zee'), 
+    (1, 'SR'+dnnfixZll+'_low%s_Zee'%(lowSuffix)), (5, 'SR'+dnnfixZll+'_med_Zee_0j'),(9,'SR'+dnnfixZll+'_med_Zee_ge1j'),
+    (21, 'SR'+dnnfixZll+'_high1_Zee'),  (23, 'SR'+dnnfixZll+'_high2_Zee'), 
   ],
   'Zmm' : [
-    (1, 'SR_low%s_Zmm'%(lowSuffix)), (5, 'SR_med_Zmm_0j'),(9, 'SR_med_Zmm_ge1j'),
-    (21, 'SR_high1_Zmm'),  (23, 'SR_high2_Zmm'), 
+    (1, 'SR'+dnnfixZll+'_low%s_Zmm'%(lowSuffix)), (5, 'SR'+dnnfixZll+'_med_Zmm_0j'),(9, 'SR'+dnnfixZll+'_med_Zmm_ge1j'),
+    (21, 'SR'+dnnfixZll+'_high1_Zmm'),  (23, 'SR'+dnnfixZll+'_high2_Zmm'), 
   ],
   'Znn' : [
-    (5, 'SR_med_Znn_0j'),(9,'SR_med_Znn_ge1j'),
-    (21, 'SR_high1_Znn'),  (23, 'SR_high2_Znn'),
+    (5, 'SR'+dnnfix+'_med_Znn_0j'),(9,'SR'+dnnfix+'_med_Znn_ge1j'),
+    (21, 'SR'+dnnfix+'_high1_Znn'),  (23, 'SR'+dnnfix+'_high2_Znn'),
   ],
  'Wen' : [
-    (5, 'SR_med_Wen'),
-    (21, 'SR_high1_Wen'),  (23, 'SR_high2_Wen'), 
+    (5, 'SR'+dnnfix+'_med_Wen'),
+    (21, 'SR'+dnnfix+'_high1_Wen'),  (23, 'SR'+dnnfix+'_high2_Wen'), 
   ],
  'Wmn' : [
-    (5, 'SR_med_Wmn'),
-    (21, 'SR_high1_Wmn'), (23, 'SR_high2_Wmn'), 
+    (5, 'SR'+dnnfix+'_med_Wmn'),
+    (21, 'SR'+dnnfix+'_high1_Wmn'), (23, 'SR'+dnnfix+'_high2_Wmn'), 
   ]
 }
 
@@ -461,6 +465,41 @@ elif args.rebinning_scheme == 'v2-whznnh-hf-dnn-massAnalysis-2016': # all channe
     binning=np.append(binning,[160.])
     cb.cp().channel(['Zee','Zmm']).bin_id([1,2,3,4,5,6,7,8]).VariableRebin(binning)
     cb.cp().channel(['Wen','Wmn','Znn']).bin_id([1,2,3,4]).VariableRebin(binning)
+elif args.rebinning_scheme == 'fix0lepHFV11':
+    binning = [0,3,4,5]
+    print("Merging first 3 0lep HF bins")
+    cb.cp().channel(['Znn']).bin_id([7,15]).VariableRebin(binning)
+
+
+#binning_LFlow=np.array([75.0,110.0,150.0])
+#print 'binning in CR for LF low fitting variable:',binning_LFlow,'for all the channels'
+#cb.cp().bin_id([2]).VariableRebin(binning_LFlow)
+#
+#binning_TTlow=np.array([75.0,150.0])
+#print 'binning in CR for TT low fitting variable:',binning_TTlow,'for all the channels'
+#cb.cp().bin_id([4]).VariableRebin(binning_TTlow)
+#
+#binning_LFmed=np.array([150.0,200.0,250.0])
+#print 'binning in CR for LF med fitting variable:',binning_LFmed,'for all the channels'
+#cb.cp().bin_id([6]).VariableRebin(binning_LFmed)
+#
+#binning_TTmed=np.array([150.0,250.0])
+#print 'binning in CR for TT med fitting variable:',binning_TTmed,'for all the channels'
+#cb.cp().bin_id([8]).VariableRebin(binning_TTmed)
+#
+#binning_LFhigh=np.array([250.0,300.0,400.0,2000.0])
+#print 'binning in CR for LF high fitting variable:',binning_LFhigh,'for all the channels'
+#cb.cp().bin_id([14]).VariableRebin(binning_LFhigh)
+#
+#binning_TThigh=np.array([250.0,2000.0])
+#print 'binning in CR for TT high fitting variable:',binning_TThigh,'for all the channels'
+#cb.cp().bin_id([16]).VariableRebin(binning_TThigh)
+#
+#binning=np.linspace(2.0,5.0,num=4)
+#print 'binning in CR for HF fitting variable:',binning,'for all Zll channel'
+#cb.cp().channel(['Zee','Zmm']).bin_id([3,7,15]).VariableRebin(binning)
+
+
 
 cb.FilterProcs(lambda x: drop_zero_procs(cb,x))
 cb.FilterSysts(lambda x: drop_zero_systs(x))

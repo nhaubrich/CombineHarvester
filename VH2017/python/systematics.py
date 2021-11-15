@@ -109,29 +109,29 @@ def AddCommonSystematics(cb):
 def AddSystematics2017(cb,sfscheme):
   cb.cp().AddSyst(cb,'CMS_vhbb_puWeight','shape',ch.SystMap()(1.0))
 
-  #cb.cp().process(['ZH_hbb']).AddSyst(cb,'CMS_LHE_weights_scale_muR_ZH','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['ZH_hbb']).AddSyst(cb,'CMS_LHE_weights_scale_muF_ZH','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['WH_hbb']).AddSyst(cb,'CMS_LHE_weights_scale_muR_WH','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['WH_hbb']).AddSyst(cb,'CMS_LHE_weights_scale_muF_WH','shape',ch.SystMap()(1.0))
-  #
-  #cb.cp().process(['ggZH_hbb']).AddSyst(cb,'CMS_LHE_weights_scale_muR_ggZH','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['ggZH_hbb']).AddSyst(cb,'CMS_LHE_weights_scale_muF_ggZH','shape',ch.SystMap()(1.0))
-  #
-  #cb.cp().process(['Zj0b']).AddSyst(cb,'CMS_LHE_weights_scale_muR_Zj0b','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['Zj0b']).AddSyst(cb,'CMS_LHE_weights_scale_muF_Zj0b','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['Zj1b']).AddSyst(cb,'CMS_LHE_weights_scale_muR_Zj1b','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['Zj1b']).AddSyst(cb,'CMS_LHE_weights_scale_muF_Zj1b','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['Zj2b']).AddSyst(cb,'CMS_LHE_weights_scale_muR_Zj2b','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['Zj2b']).AddSyst(cb,'CMS_LHE_weights_scale_muF_Zj2b','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['Wj0b']).AddSyst(cb,'CMS_LHE_weights_scale_muR_Wj0b','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['Wj0b']).AddSyst(cb,'CMS_LHE_weights_scale_muF_Wj0b','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['Wj1b']).AddSyst(cb,'CMS_LHE_weights_scale_muR_Wj1b','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['Wj1b']).AddSyst(cb,'CMS_LHE_weights_scale_muF_Wj1b','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['Wj2b']).AddSyst(cb,'CMS_LHE_weights_scale_muR_Wj2b','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['Wj2b']).AddSyst(cb,'CMS_LHE_weights_scale_muF_Wj2b','shape',ch.SystMap()(1.0))
-  #
-  #cb.cp().process(['TT']).AddSyst(cb,'CMS_LHE_weights_scale_muR_TT','shape',ch.SystMap()(1.0))
-  #cb.cp().process(['TT']).AddSyst(cb,'CMS_LHE_weights_scale_muF_TT','shape',ch.SystMap()(1.0))
+  cb.cp().process(['ZH_hbb']).AddSyst(cb,'CMS_LHE_weights_scale_muR_ZH','shape',ch.SystMap()(1.0))
+  cb.cp().process(['ZH_hbb']).AddSyst(cb,'CMS_LHE_weights_scale_muF_ZH','shape',ch.SystMap()(1.0))
+  cb.cp().process(['WH_hbb']).AddSyst(cb,'CMS_LHE_weights_scale_muR_WH','shape',ch.SystMap()(1.0))
+  cb.cp().process(['WH_hbb']).AddSyst(cb,'CMS_LHE_weights_scale_muF_WH','shape',ch.SystMap()(1.0))
+  
+  cb.cp().process(['ggZH_hbb']).AddSyst(cb,'CMS_LHE_weights_scale_muR_ggZH','shape',ch.SystMap()(1.0))
+  cb.cp().process(['ggZH_hbb']).AddSyst(cb,'CMS_LHE_weights_scale_muF_ggZH','shape',ch.SystMap()(1.0))
+  
+  cb.cp().process(['Zj0b']).AddSyst(cb,'CMS_LHE_weights_scale_muR_Zj0b','shape',ch.SystMap()(1.0))
+  cb.cp().process(['Zj0b']).AddSyst(cb,'CMS_LHE_weights_scale_muF_Zj0b','shape',ch.SystMap()(1.0))
+  cb.cp().process(['Zj1b']).AddSyst(cb,'CMS_LHE_weights_scale_muR_Zj1b','shape',ch.SystMap()(1.0))
+  cb.cp().process(['Zj1b']).AddSyst(cb,'CMS_LHE_weights_scale_muF_Zj1b','shape',ch.SystMap()(1.0))
+  cb.cp().process(['Zj2b']).AddSyst(cb,'CMS_LHE_weights_scale_muR_Zj2b','shape',ch.SystMap()(1.0))
+  cb.cp().process(['Zj2b']).AddSyst(cb,'CMS_LHE_weights_scale_muF_Zj2b','shape',ch.SystMap()(1.0))
+  cb.cp().process(['Wj0b']).AddSyst(cb,'CMS_LHE_weights_scale_muR_Wj0b','shape',ch.SystMap()(1.0))
+  cb.cp().process(['Wj0b']).AddSyst(cb,'CMS_LHE_weights_scale_muF_Wj0b','shape',ch.SystMap()(1.0))
+  cb.cp().process(['Wj1b']).AddSyst(cb,'CMS_LHE_weights_scale_muR_Wj1b','shape',ch.SystMap()(1.0))
+  cb.cp().process(['Wj1b']).AddSyst(cb,'CMS_LHE_weights_scale_muF_Wj1b','shape',ch.SystMap()(1.0))
+  cb.cp().process(['Wj2b']).AddSyst(cb,'CMS_LHE_weights_scale_muR_Wj2b','shape',ch.SystMap()(1.0))
+  cb.cp().process(['Wj2b']).AddSyst(cb,'CMS_LHE_weights_scale_muF_Wj2b','shape',ch.SystMap()(1.0))
+  
+  cb.cp().process(['TT']).AddSyst(cb,'CMS_LHE_weights_scale_muR_TT','shape',ch.SystMap()(1.0))
+  cb.cp().process(['TT']).AddSyst(cb,'CMS_LHE_weights_scale_muF_TT','shape',ch.SystMap()(1.0))
 
   cb.cp().process(['Zj0b','Zj1b','Zj2b','Wj0b','Wj1b','Wj2b']).AddSyst(cb,
                     'CMS_vhbb_vjetnlodetajjrw_13TeV','shape',ch.SystMap()(1.0))
@@ -233,11 +233,6 @@ def AddSystematics2017(cb,sfscheme):
 
   elif sfscheme == "catmig":
     year="2017"
-    for proc in ['TT','Zj0b','Zj1b','Zj2b']:
-        cb.cp().channel(['Znn']).process([proc]).AddSyst(cb,
-          'SF_'+proc+'_Znn_'+year, 'rateParam', ch.SystMap('bin_id')
-          ([5,6,7,8,9,13,14,15,16,17,21,22,23,24,18,19,20],1.0))
-    cb.cp().channel(['Znn']).process(['Zj0b','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
     # Znn
     for proc in ['TT','Zj0b','Zj1b','Zj2b']:
         cb.cp().channel(['Znn']).process([proc]).AddSyst(cb,
@@ -273,6 +268,7 @@ def AddSystematics2017(cb,sfscheme):
 
    
     cb.cp().channel(["Zee","Zmm"]).process(['Zj0b','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt150_13TeV','shape',ch.SystMap()(1.0))
+    cb.cp().channel(["Zee","Zmm"]).process(['Zj0b','Zj1b','Zj2b','TT']).AddSyst(cb,'CMS_vhbb_Vpt250_13TeV','shape',ch.SystMap()(1.0))
 
 
     #Set a sensible range for the rate params
